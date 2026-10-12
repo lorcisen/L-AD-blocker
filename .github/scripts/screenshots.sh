@@ -45,64 +45,12 @@ for d in googleads.g.doubleclick.net ads.unity3d.com www.google.com api.applovin
   adb shell ping -c 1 -W 1 $d >/dev/null 2>&1
 done
 shot 2-home-on
-adb shell input swipe 540 1800 540 600 300
-shot 3-home-scrolled
-
-tap "Aktivitet"
-shot 4-activity
-tap "Blockerade"
-shot 5-activity-blocked
-tap "app-measurement.com"
-shot 5b-allow-dialog
-tap "Avbryt"
-
-tap "Inställningar"
-shot 6-settings
-adb shell input swipe 540 1900 540 400 300
-shot 7-settings-scrolled
-adb shell input swipe 540 1900 540 400 300
-adb shell input swipe 540 1900 540 400 300
-shot 7b-settings-bottom
-tap "YouTube, webbläsare och spel"
-shot 8-help
-tap "Klar"
-tap "Tillåtna domäner"
-shot 8b-edit-list
-tap "Avbryt"
-
-adb shell input keyevent KEYCODE_HOME
-adb shell cmd statusbar expand-notifications
-shot 9-notification
-adb shell cmd statusbar collapse
-adb shell am start -n $PKG/.MainActivity
-tap "Slå på eller av reklamblockering"
-shot 10-turned-off
-
-tap "Inställningar"
-adb shell input swipe 540 1900 540 400 300
-adb shell input swipe 540 1900 540 400 300
-tap "Appens språk"
-shot 11-language-picker
-tap "Español"
-sleep 3
-shot 12-settings-es
-tap "Inicio"
-shot 13-home-es
-adb shell cmd locale set-app-locales $PKG --locales ja
-adb shell am start -n $PKG/.MainActivity
-shot 14-home-ja
-adb shell cmd locale set-app-locales $PKG --locales ""
-adb shell am force-stop $PKG
-adb shell am start -n $PKG/.MainActivity
-sleep 4
-shot 15-home-system-en
-
 # Ad hiding: a stand-in feed app with the Facebook package name, and the accessibility service on.
 adb install -r fakefeed.apk
 adb shell settings put secure enabled_accessibility_services $PKG/$PKG.AdHiderService
 adb shell settings put secure accessibility_enabled 1
 sleep 3
-adb shell am start -W -n com.facebook.katana/.FeedActivity
+timeout 30 adb shell am start -W -n com.facebook.katana/.FeedActivity
 sleep 3
 shot 16-feed-top
 adb shell input swipe 540 1700 540 1100 400
@@ -115,5 +63,5 @@ adb shell am start -n $PKG/.MainActivity
 tap "Hem"
 shot 20-home-apps-card
 
-adb logcat -d | grep -E "AndroidRuntime|AdBlockVpn|Blocklists" > shots/logcat.txt
+timeout 30 adb logcat -d | grep -E "AndroidRuntime|AdBlockVpn|Blocklists|FATAL" > shots/logcat.txt
 exit 0
