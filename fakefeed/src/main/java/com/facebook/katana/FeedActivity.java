@@ -23,7 +23,7 @@ public class FeedActivity extends Activity {
         super.onCreate(b);
         String[][] posts = {
             {"Anna Svensson", "3 tim", "Vilken fin dag vid sjön!", "#8BC34A"},
-            {"NIBE", "Sponsrad · 🌐", "Bra uppvärmning gör livet enklare", "#C62828"},
+            {"NIBE", "Sponsras · 🌐", "Bra uppvärmning gör livet enklare", "#C62828"},
             {"Erik Larsson", "5 tim", "Ny bil idag", "#03A9F4"},
             {"Stadium Outlet", "Sponsrad", "Sport och fritid till outletpris", "#FFEB3B"},
             {"Lisa Berg", "1 d", "Middag med vänner", "#9C27B0"},

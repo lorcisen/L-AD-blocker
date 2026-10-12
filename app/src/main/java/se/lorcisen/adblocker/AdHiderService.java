@@ -56,7 +56,7 @@ public class AdHiderService extends AccessibilityService {
     private static final String[][] WORDS = {
         // language, sponsored labels..., "|", like buttons...
         {"en", "Sponsored", "|", "Like"},
-        {"sv", "Sponsrad", "Sponsrat", "|", "Gilla"},
+        {"sv", "Sponsras", "Sponsrad", "Sponsrat", "|", "Gilla"},
         {"es", "Publicidad", "Patrocinado", "Patrocinada", "|", "Me gusta"},
         {"de", "Gesponsert", "|", "Gefällt mir"},
         {"fr", "Sponsorisé", "Sponsorisée", "|", "J’aime", "J'aime"},

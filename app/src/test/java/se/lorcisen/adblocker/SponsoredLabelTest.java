@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 public class SponsoredLabelTest {
-    private final Pattern p = AdHiderService.buildPattern(Arrays.asList("Sponsored", "Sponsrad", "Sponsrat"));
+    private final Pattern p = AdHiderService.buildPattern(Arrays.asList("Sponsored", "Sponsras", "Sponsrad", "Sponsrat"));
 
     private boolean m(String s) {
         return p.matcher(s).find();
@@ -24,6 +24,8 @@ public class SponsoredLabelTest {
         assertTrue(m("NIBE, Sponsrad · Visa mer"));
         assertTrue(m("NIBE Sponsrad"));
         assertTrue(m("Sponsored"));
+        assertTrue(m("Sponsras · "));
+        assertTrue(m("POWER Sponsras ·"));
         assertTrue(m("Sponsrat inlägg".replace(" inlägg", "")));
     }
 
