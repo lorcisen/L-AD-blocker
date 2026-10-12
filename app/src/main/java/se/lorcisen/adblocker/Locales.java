@@ -52,8 +52,15 @@ final class Locales {
 
     /** Applies the chosen language to a base context (Android 12 and older). */
     static Context wrap(Context base) {
-        if (Build.VERSION.SDK_INT >= 33) return base;
-        String tag = Settings.prefs(base).getString(KEY, "");
+        String tag;
+        if (Build.VERSION.SDK_INT >= 33) {
+            // Activities get the per-app language automatically; services such as the
+            // accessibility service do not always, so apply it explicitly.
+            LocaleList l = base.getSystemService(LocaleManager.class).getApplicationLocales();
+            tag = l.isEmpty() ? "" : l.get(0).toLanguageTag();
+        } else {
+            tag = Settings.prefs(base).getString(KEY, "");
+        }
         if (tag.isEmpty()) return base;
         Configuration config = new Configuration(base.getResources().getConfiguration());
         config.setLocale(Locale.forLanguageTag(tag));
