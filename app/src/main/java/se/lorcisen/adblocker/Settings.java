@@ -9,50 +9,47 @@ final class Settings {
 
     static final class Source {
         final String id;
-        final String name;
-        final String description;
+        /** Product name, or null when {@link #nameRes} should be used. */
+        private final String fixedName;
+        private final int nameRes;
+        final int descRes;
         final String[] urls;
         final boolean defaultEnabled;
 
-        Source(String id, String name, String description, boolean defaultEnabled, String... urls) {
+        Source(String id, String fixedName, int nameRes, int descRes, boolean defaultEnabled, String... urls) {
             this.id = id;
-            this.name = name;
-            this.description = description;
+            this.fixedName = fixedName;
+            this.nameRes = nameRes;
+            this.descRes = descRes;
             this.urls = urls;
             this.defaultEnabled = defaultEnabled;
+        }
+
+        String name(Context c) {
+            return fixedName != null ? fixedName : c.getString(nameRes);
         }
     }
 
     private static final String HAGEZI = "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/";
 
     static final Source[] SOURCES = {
-        new Source("hagezi_pro", "HaGeZi Multi PRO",
-                "Reklam, spårning och popup-reklam i appar, spel och webbläsare (rekommenderas)", true,
+        new Source("hagezi_pro", "HaGeZi Multi PRO", 0, R.string.source_hagezi_desc, true,
                 HAGEZI + "wildcard/pro-onlydomains.txt"),
-        new Source("stevenblack", "StevenBlack Unified",
-                "Klassisk hosts-lista mot reklam och skadliga sidor", true,
+        new Source("stevenblack", "StevenBlack Unified", 0, R.string.source_stevenblack_desc, true,
                 "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"),
-        new Source("adaway", "AdAway",
-                "Reklam i mobilappar och spel", true,
+        new Source("adaway", "AdAway", 0, R.string.source_adaway_desc, true,
                 "https://adaway.org/hosts.txt"),
-        new Source("hagezi_native", "Tillverkarnas spårning",
-                "Inbyggd reklam och telemetri från Samsung, Xiaomi, Huawei, Oppo/Realme, Vivo", false,
+        new Source("hagezi_native", null, R.string.source_native_name, R.string.source_native_desc, false,
                 HAGEZI + "adblock/native.samsung.txt",
                 HAGEZI + "adblock/native.xiaomi.txt",
                 HAGEZI + "adblock/native.huawei.txt",
                 HAGEZI + "adblock/native.oppo-realme.txt",
                 HAGEZI + "adblock/native.vivo.txt"),
-        new Source("oisd_big", "OISD Big",
-                "Stor kombinerad lista – blockerar mer men kan ibland ge fler fel", false,
+        new Source("oisd_big", "OISD Big", 0, R.string.source_oisd_desc, false,
                 "https://big.oisd.nl/"),
     };
 
-    static final String[] UPSTREAM_NAMES = {
-        "AdGuard DNS (blockerar även reklam)",
-        "Cloudflare (1.1.1.1)",
-        "Quad9 (9.9.9.9)",
-        "Google (8.8.8.8)",
-    };
+    static final String[] UPSTREAM_NAMES = {"AdGuard DNS", "Cloudflare", "Quad9", "Google"};
     static final String[][] UPSTREAM_SERVERS = {
         {"94.140.14.14", "94.140.15.15"},
         {"1.1.1.1", "1.0.0.1"},
@@ -91,11 +88,4 @@ final class Settings {
         if (i < 0 || i >= UPSTREAM_SERVERS.length) i = 0;
         return UPSTREAM_SERVERS[i];
     }
-
-    /** Default allowlist: domains that blocklists sometimes catch but that break common apps. */
-    static final String DEFAULT_ALLOWLIST =
-            "# Domäner här blockeras aldrig (en per rad)\n";
-
-    static final String DEFAULT_BLOCKLIST =
-            "# Egna domäner att blockera (en per rad)\n";
 }

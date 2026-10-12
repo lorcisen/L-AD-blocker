@@ -50,7 +50,7 @@ final class PowerButton extends View {
         icon.setStrokeWidth(Ui.dp(c, 6));
         setClickable(true);
         setFocusable(true);
-        setContentDescription("Slå på eller av reklamblockering");
+        setContentDescription(c.getString(R.string.power_desc));
     }
 
     void setOn(boolean value, boolean animate) {

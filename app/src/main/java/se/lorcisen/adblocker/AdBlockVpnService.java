@@ -65,6 +65,11 @@ public class AdBlockVpnService extends VpnService {
     }
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(Locales.wrap(base));
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && ACTION_STOP.equals(intent.getAction())) {
             Settings.prefs(this).edit().putBoolean(Settings.KEY_WANT_RUNNING, false).apply();
@@ -250,7 +255,7 @@ public class AdBlockVpnService extends VpnService {
         NotificationManager nm = getSystemService(NotificationManager.class);
         if (Build.VERSION.SDK_INT >= 26) {
             nm.createNotificationChannel(new NotificationChannel(
-                    CHANNEL, "Reklamblockering", NotificationManager.IMPORTANCE_LOW));
+                    CHANNEL, getString(R.string.notif_channel), NotificationManager.IMPORTANCE_LOW));
         }
         PendingIntent stop = PendingIntent.getService(this, 1,
                 new Intent(this, AdBlockVpnService.class).setAction(ACTION_STOP),
@@ -260,12 +265,12 @@ public class AdBlockVpnService extends VpnService {
                 : new Notification.Builder(this);
         Notification n = nb
                 .setSmallIcon(R.drawable.ic_shield)
-                .setContentTitle("Reklam blockeras")
-                .setContentText("Tryck för statistik och inställningar")
+                .setContentTitle(getString(R.string.notif_title))
+                .setContentText(getString(R.string.notif_text))
                 .setContentIntent(mainActivityIntent())
                 .setOngoing(true)
                 .setColor(Ui.ACCENT)
-                .addAction(new Notification.Action.Builder(null, "Stäng av", stop).build())
+                .addAction(new Notification.Action.Builder(null, getString(R.string.notif_stop), stop).build())
                 .build();
         try {
             if (Build.VERSION.SDK_INT >= 34) {

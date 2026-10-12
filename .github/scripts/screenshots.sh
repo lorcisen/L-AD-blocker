@@ -26,6 +26,8 @@ PY
 adb install -r L-AD-blocker.apk
 adb shell appops set $PKG ACTIVATE_VPN allow
 adb shell pm grant $PKG android.permission.POST_NOTIFICATIONS || true
+# The emulator is in English; run the main flow with the app set to Swedish.
+adb shell cmd locale set-app-locales $PKG --locales sv
 adb shell am start -W -n $PKG/.MainActivity
 sleep 5
 shot 1-home-off
@@ -69,6 +71,24 @@ adb shell cmd statusbar collapse
 adb shell am start -n $PKG/.MainActivity
 tap "Slå på eller av reklamblockering"
 shot 10-turned-off
+
+tap "Inställningar"
+adb shell input swipe 540 1900 540 400 300
+adb shell input swipe 540 1900 540 400 300
+tap "Appens språk"
+shot 11-language-picker
+tap "Español"
+sleep 3
+shot 12-settings-es
+tap "Inicio"
+shot 13-home-es
+adb shell cmd locale set-app-locales $PKG --locales ja
+adb shell am start -n $PKG/.MainActivity
+shot 14-home-ja
+adb shell cmd locale set-app-locales $PKG --locales ""
+adb shell am force-stop $PKG
+adb shell am start -n $PKG/.MainActivity
+shot 15-home-system-en
 
 adb logcat -d | grep -E "AndroidRuntime|AdBlockVpn|Blocklists" > shots/logcat.txt
 exit 0

@@ -44,7 +44,6 @@ import java.util.Locale;
 public class MainActivity extends Activity {
     private static final int REQUEST_VPN = 1;
     private static final int REQUEST_NOTIFICATIONS = 2;
-    private static final Locale SV = new Locale("sv", "SE");
 
     private static final int TAB_HOME = 0;
     private static final int TAB_ACTIVITY = 1;
@@ -58,7 +57,7 @@ public class MainActivity extends Activity {
             handler.postDelayed(this, 1000);
         }
     };
-    private final NumberFormat numbers = NumberFormat.getIntegerInstance(SV);
+    private NumberFormat numbers;
 
     private final View[] pages = new View[3];
     private final LinearLayout[] navItems = new LinearLayout[3];
@@ -90,6 +89,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         goEdgeToEdge();
+        numbers = NumberFormat.getIntegerInstance(locale());
         setContentView(buildRoot());
         if (Blocklists.filter().listSize() == 0) Blocklists.loadAsync(this, false);
         if (Build.VERSION.SDK_INT >= 33
@@ -97,6 +97,19 @@ public class MainActivity extends Activity {
             requestPermissions(new String[] {"android.permission.POST_NOTIFICATIONS"}, REQUEST_NOTIFICATIONS);
         }
         power.setOn(AdBlockVpnService.isRunning(), false);
+    }
+
+    @Override
+    protected void attachBaseContext(android.content.Context base) {
+        super.attachBaseContext(Locales.wrap(base));
+    }
+
+    private Locale locale() {
+        return getResources().getConfiguration().getLocales().get(0);
+    }
+
+    private String str(int id, Object... args) {
+        return getString(id, args);
     }
 
     @Override
@@ -183,7 +196,7 @@ public class MainActivity extends Activity {
     private LinearLayout buildNav() {
         LinearLayout nav = Ui.horizontal(this);
         nav.setBackgroundColor(Ui.SURFACE);
-        String[] labels = {"Hem", "Aktivitet", "Inställningar"};
+        String[] labels = {str(R.string.nav_home), str(R.string.nav_activity), str(R.string.nav_settings)};
         int[] icons = {R.drawable.ic_nav_home, R.drawable.ic_nav_activity, R.drawable.ic_nav_settings};
         for (int i = 0; i < 3; i++) {
             LinearLayout item = Ui.vertical(this);
@@ -282,12 +295,12 @@ public class MainActivity extends Activity {
 
         LinearLayout stats = Ui.horizontal(this);
         stats.setPadding(0, Ui.dp(this, 28), 0, 0);
-        statBlocked = statCard(stats, "Blockerat nu", 0);
-        statShare = statCard(stats, "Andel reklam", 10);
-        statTotal = statCard(stats, "Totalt", 10);
+        statBlocked = statCard(stats, str(R.string.stat_blocked), 0);
+        statShare = statCard(stats, str(R.string.stat_share), 10);
+        statTotal = statCard(stats, str(R.string.stat_total), 10);
         col.addView(stats, Ui.matchWrap());
 
-        col.addView(Ui.sectionLabel(this, "Skyddsdatabas"));
+        col.addView(Ui.sectionLabel(this, str(R.string.section_database)));
         LinearLayout db = Ui.card(this);
         LinearLayout dbRow = Ui.row(this);
         FrameLayout iconCircle = new FrameLayout(this);
@@ -299,14 +312,14 @@ public class MainActivity extends Activity {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ilp.rightMargin = Ui.dp(this, 14);
         dbRow.addView(iconCircle, ilp);
-        LinearLayout dbText = Ui.titleBlock(this, "Blocklistor", "");
+        LinearLayout dbText = Ui.titleBlock(this, str(R.string.database_title), "");
         databaseSubtitle = (TextView) dbText.getChildAt(1);
         dbRow.addView(dbText);
         FrameLayout refresh = new FrameLayout(this);
         refresh.setPadding(pad, pad, pad, pad);
         refresh.addView(Ui.icon(this, R.drawable.ic_refresh, Ui.TEXT, 22));
         refresh.setBackground(Ui.ripple(Ui.rounded(this, Ui.SURFACE_2, 22), Ui.rounded(this, Color.WHITE, 22)));
-        refresh.setContentDescription("Uppdatera blocklistor");
+        refresh.setContentDescription(str(R.string.refresh_desc));
         refresh.setOnClickListener(v -> {
             Blocklists.updateAsync(this);
             v.animate().rotationBy(360).setDuration(700).start();
@@ -319,12 +332,12 @@ public class MainActivity extends Activity {
         db.addView(databaseStatus);
         col.addView(db, Ui.matchWrap());
 
-        col.addView(Ui.sectionLabel(this, "Senast blockerat"));
+        col.addView(Ui.sectionLabel(this, str(R.string.section_recent)));
         LinearLayout recent = Ui.card(this);
         recentList = Ui.vertical(this);
         recent.addView(recentList);
         recent.addView(Ui.divider(this));
-        Ui.navRow(recent, "Visa all aktivitet", null, v -> selectTab(TAB_ACTIVITY));
+        Ui.navRow(recent, str(R.string.show_all_activity), null, v -> selectTab(TAB_ACTIVITY));
         col.addView(recent, Ui.matchWrap());
         return scroll;
     }
@@ -351,13 +364,13 @@ public class MainActivity extends Activity {
     private View buildActivity() {
         LinearLayout page = Ui.vertical(this);
         page.setPadding(Ui.dp(this, 20), Ui.dp(this, 12), Ui.dp(this, 20), 0);
-        page.addView(pageTitle("Aktivitet"));
-        TextView sub = Ui.text(this, "Tryck på en domän för att tillåta eller blockera den.", 14, Ui.TEXT_2, Ui.REGULAR);
+        page.addView(pageTitle(str(R.string.activity_title)));
+        TextView sub = Ui.text(this, str(R.string.activity_sub), 14, Ui.TEXT_2, Ui.REGULAR);
         sub.setPadding(Ui.dp(this, 4), 0, 0, Ui.dp(this, 14));
         page.addView(sub);
 
         LinearLayout chips = Ui.horizontal(this);
-        String[] names = {"Alla", "Blockerade", "Tillåtna"};
+        String[] names = {str(R.string.filter_all), str(R.string.filter_blocked), str(R.string.filter_allowed)};
         for (int i = 0; i < 3; i++) {
             TextView chip = Ui.text(this, names[i], 14, Ui.TEXT, Ui.MEDIUM);
             chip.setPadding(Ui.dp(this, 16), Ui.dp(this, 8), Ui.dp(this, 16), Ui.dp(this, 8));
@@ -395,7 +408,7 @@ public class MainActivity extends Activity {
     }
 
     private final class LogAdapter extends BaseAdapter {
-        private final SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss", SV);
+        private final SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss", Locale.ROOT);
         private List<QueryLog.Entry> items = new ArrayList<>();
 
         void set(List<QueryLog.Entry> entries) {
@@ -453,7 +466,7 @@ public class MainActivity extends Activity {
             ((TextView) text.getChildAt(0)).setText(e.domain);
             ((TextView) text.getChildAt(1)).setText(time.format(new Date(e.time)));
             TextView badge = (TextView) row.getChildAt(2);
-            badge.setText(e.blocked ? "BLOCKERAD" : "TILLÅTEN");
+            badge.setText(str(e.blocked ? R.string.label_blocked : R.string.label_allowed));
             badge.setTextColor(e.blocked ? Ui.DANGER : Ui.TEXT_2);
             badge.setBackground(Ui.rounded(MainActivity.this,
                     Ui.withAlpha(e.blocked ? Ui.DANGER : Ui.TEXT_2, 0x22), 20));
@@ -479,19 +492,19 @@ public class MainActivity extends Activity {
         }
         activityEmpty.setVisibility(shown.isEmpty() ? View.VISIBLE : View.GONE);
         activityEmpty.setText(AdBlockVpnService.isRunning()
-                ? "Inga uppslag ännu.\nAnvänd telefonen som vanligt så visas aktiviteten här."
-                : "Skyddet är avstängt.\nSlå på det på Hem-fliken.");
+                ? str(R.string.activity_empty_on)
+                : str(R.string.activity_empty_off));
     }
 
     private void onLogEntryClicked(QueryLog.Entry e) {
         if (e.blocked) {
-            Ui.dialog(this, "Tillåt domänen?",
-                    e.domain + "\n\nGör detta om en app eller webbplats slutar fungera. Domänen och dess underdomäner blockeras inte längre.",
-                    null, "Tillåt", () -> addToUserList(Settings.KEY_ALLOWLIST, e.domain), "Avbryt");
+            Ui.dialog(this, str(R.string.allow_title), str(R.string.allow_message, e.domain), null,
+                    str(R.string.action_allow), () -> addToUserList(Settings.KEY_ALLOWLIST, e.domain),
+                    str(R.string.action_cancel));
         } else {
-            Ui.dialog(this, "Blockera domänen?",
-                    e.domain + "\n\nDomänen och dess underdomäner kommer att blockeras.",
-                    null, "Blockera", () -> addToUserList(Settings.KEY_BLOCKLIST, e.domain), "Avbryt");
+            Ui.dialog(this, str(R.string.block_title), str(R.string.block_message, e.domain), null,
+                    str(R.string.action_block), () -> addToUserList(Settings.KEY_BLOCKLIST, e.domain),
+                    str(R.string.action_cancel));
         }
     }
 
@@ -507,7 +520,7 @@ public class MainActivity extends Activity {
         }
         p.edit().putString(key, text + domain + "\n").putString(other, kept.toString()).apply();
         Blocklists.reloadUserLists(this);
-        Toast.makeText(this, key.equals(Settings.KEY_ALLOWLIST) ? "Domänen är tillåten" : "Domänen blockeras",
+        Toast.makeText(this, str(key.equals(Settings.KEY_ALLOWLIST) ? R.string.toast_allowed : R.string.toast_blocked),
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -516,15 +529,15 @@ public class MainActivity extends Activity {
     private View buildSettings() {
         ScrollView scroll = new ScrollView(this);
         LinearLayout col = pageColumn(scroll);
-        col.addView(pageTitle("Inställningar"));
+        col.addView(pageTitle(str(R.string.settings_title)));
         SharedPreferences prefs = Settings.prefs(this);
 
-        col.addView(Ui.sectionLabel(this, "Blocklistor"));
+        col.addView(Ui.sectionLabel(this, str(R.string.section_lists)));
         LinearLayout lists = Ui.card(this);
         for (int i = 0; i < Settings.SOURCES.length; i++) {
             Settings.Source s = Settings.SOURCES[i];
             if (i > 0) lists.addView(Ui.divider(this));
-            Switch sw = Ui.switchRow(lists, s.name, s.description, Settings.isSourceEnabled(this, s));
+            Switch sw = Ui.switchRow(lists, s.name(this), str(s.descRes), Settings.isSourceEnabled(this, s));
             sw.setOnCheckedChangeListener((b, checked) -> {
                 Settings.setSourceEnabled(this, s, checked);
                 Blocklists.updateAsync(this);
@@ -532,19 +545,13 @@ public class MainActivity extends Activity {
         }
         col.addView(lists, Ui.matchWrap());
 
-        col.addView(Ui.sectionLabel(this, "DNS-server"));
+        col.addView(Ui.sectionLabel(this, str(R.string.section_dns)));
         LinearLayout dns = Ui.card(this);
         int selected = prefs.getInt(Settings.KEY_UPSTREAM, 0);
         for (int i = 0; i < Settings.UPSTREAM_NAMES.length; i++) {
             if (i > 0) dns.addView(Ui.divider(this));
-            String name = Settings.UPSTREAM_NAMES[i];
-            String title = name, subtitle = null;
-            int paren = name.indexOf(" (");
-            if (paren > 0) {
-                title = name.substring(0, paren);
-                subtitle = name.substring(paren + 2, name.length() - 1);
-                subtitle = Character.toUpperCase(subtitle.charAt(0)) + subtitle.substring(1);
-            }
+            String title = Settings.UPSTREAM_NAMES[i];
+            String subtitle = i == 0 ? str(R.string.dns_adguard_desc) : Settings.UPSTREAM_SERVERS[i][0];
             LinearLayout row = Ui.row(this);
             row.addView(Ui.titleBlock(this, title, subtitle));
             ImageView check = Ui.icon(this, R.drawable.ic_check, Ui.ACCENT, 22);
@@ -565,36 +572,41 @@ public class MainActivity extends Activity {
         }
         col.addView(dns, Ui.matchWrap());
 
-        col.addView(Ui.sectionLabel(this, "Avancerat"));
+        col.addView(Ui.sectionLabel(this, str(R.string.section_advanced)));
         LinearLayout adv = Ui.card(this);
-        Switch hard = Ui.switchRow(adv, "Fånga hårdkodad DNS",
-                "Stoppar appar som försöker gå förbi blockeringen genom att fråga 8.8.8.8, 1.1.1.1 m.fl. direkt",
+        Switch hard = Ui.switchRow(adv, str(R.string.hardcoded_title), str(R.string.hardcoded_desc),
                 prefs.getBoolean(Settings.KEY_CATCH_HARDCODED, true));
         hard.setOnCheckedChangeListener((b, checked) -> {
             prefs.edit().putBoolean(Settings.KEY_CATCH_HARDCODED, checked).apply();
             AdBlockVpnService.restartIfRunning(this);
         });
         adv.addView(Ui.divider(this));
-        Ui.navRow(adv, "Tillåtna domäner", "Blockeras aldrig, även om de finns i en lista",
-                v -> editList("Tillåtna domäner", Settings.KEY_ALLOWLIST, Settings.DEFAULT_ALLOWLIST));
+        Ui.navRow(adv, str(R.string.allowlist_title), str(R.string.allowlist_desc),
+                v -> editList(str(R.string.allowlist_title), Settings.KEY_ALLOWLIST));
         adv.addView(Ui.divider(this));
-        Ui.navRow(adv, "Egna blockerade domäner", "Blockeras alltid",
-                v -> editList("Egna blockerade domäner", Settings.KEY_BLOCKLIST, Settings.DEFAULT_BLOCKLIST));
+        Ui.navRow(adv, str(R.string.blocklist_title), str(R.string.blocklist_desc),
+                v -> editList(str(R.string.blocklist_title), Settings.KEY_BLOCKLIST));
         adv.addView(Ui.divider(this));
-        Ui.navRow(adv, "Alltid på", "Starta skyddet automatiskt via Androids VPN-inställningar", v -> {
+        Ui.navRow(adv, str(R.string.always_on_title), str(R.string.always_on_desc), v -> {
             try {
                 startActivity(new Intent(android.provider.Settings.ACTION_VPN_SETTINGS));
             } catch (RuntimeException ex) {
-                Toast.makeText(this, "Kunde inte öppna VPN-inställningarna", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, str(R.string.always_on_error), Toast.LENGTH_SHORT).show();
             }
         });
         col.addView(adv, Ui.matchWrap());
 
-        col.addView(Ui.sectionLabel(this, "Hjälp"));
+        col.addView(Ui.sectionLabel(this, str(R.string.section_language)));
+        LinearLayout lang = Ui.card(this);
+        Ui.navRow(lang, str(R.string.language_title), Locales.displayName(this, Locales.current(this)),
+                v -> showLanguagePicker());
+        col.addView(lang, Ui.matchWrap());
+
+        col.addView(Ui.sectionLabel(this, str(R.string.section_help)));
         LinearLayout help = Ui.card(this);
-        Ui.navRow(help, "YouTube, webbläsare och spel", "Vad som blockeras och tips för bästa resultat", v -> showHelp());
+        Ui.navRow(help, str(R.string.help_row_title), str(R.string.help_row_desc), v -> showHelp());
         help.addView(Ui.divider(this));
-        Ui.navRow(help, "Om L-AD Blocker", null, v -> showAbout());
+        Ui.navRow(help, str(R.string.about_title), null, v -> showAbout());
         col.addView(help, Ui.matchWrap());
 
         TextView footer = Ui.text(this, "L-AD Blocker " + versionName(), 12, Ui.TEXT_3, Ui.REGULAR);
@@ -612,7 +624,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void editList(String title, String key, String defaultText) {
+    private void editList(String title, String key) {
         SharedPreferences p = Settings.prefs(this);
         EditText edit = new EditText(this);
         edit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE
@@ -624,27 +636,54 @@ public class MainActivity extends Activity {
         edit.setTextSize(14);
         edit.setTextColor(Ui.TEXT);
         edit.setHintTextColor(Ui.TEXT_3);
-        edit.setHint("exempel.se");
+        edit.setHint(str(R.string.edit_list_hint));
         int pad = Ui.dp(this, 14);
         edit.setPadding(pad, pad, pad, pad);
         edit.setBackground(Ui.roundedStroke(this, Ui.SURFACE_2, Ui.STROKE, 16));
-        edit.setText(p.getString(key, defaultText));
-        Ui.dialog(this, title, "En domän per rad. Underdomäner räknas med.", edit, "Spara", () -> {
+        edit.setText(p.getString(key, ""));
+        Ui.dialog(this, title, str(R.string.edit_list_message), edit, str(R.string.action_save), () -> {
             p.edit().putString(key, edit.getText().toString()).apply();
             Blocklists.reloadUserLists(this);
-        }, "Avbryt");
+        }, str(R.string.action_cancel));
+    }
+
+    private void showLanguagePicker() {
+        String current = Locales.current(this);
+        LinearLayout list = Ui.vertical(this);
+        ScrollView sv = new ScrollView(this);
+        sv.setVerticalScrollBarEnabled(false);
+        sv.addView(list);
+        sv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                (int) (getResources().getDisplayMetrics().heightPixels * 0.55f)));
+        android.app.Dialog[] dialog = new android.app.Dialog[1];
+        for (String tag : Locales.TAGS) {
+            LinearLayout row = Ui.horizontal(this);
+            row.setPadding(Ui.dp(this, 4), Ui.dp(this, 14), Ui.dp(this, 4), Ui.dp(this, 14));
+            String sub = tag.isEmpty() ? Locales.systemLanguageName() : null;
+            row.addView(Ui.titleBlock(this, Locales.displayName(this, tag), sub));
+            ImageView check = Ui.icon(this, R.drawable.ic_check, Ui.ACCENT, 22);
+            check.setVisibility(tag.equals(current) ? View.VISIBLE : View.INVISIBLE);
+            row.addView(check);
+            row.setBackground(Ui.ripple(null, Ui.rounded(this, Color.WHITE, 12)));
+            row.setOnClickListener(v -> {
+                if (dialog[0] != null) dialog[0].dismiss();
+                if (!tag.equals(current)) Locales.set(this, tag);
+            });
+            list.addView(row);
+        }
+        dialog[0] = Ui.dialog(this, str(R.string.language_title), null, sv, null, null, str(R.string.action_cancel));
     }
 
     private void showHelp() {
         SpannableStringBuilder sb = new SpannableStringBuilder();
-        for (String[] s : HELP) {
+        for (int[] s : HELP) {
             if (sb.length() > 0) sb.append("\n\n");
             int start = sb.length();
-            sb.append(s[0]);
+            sb.append(str(s[0]));
             sb.setSpan(new ForegroundColorSpan(Ui.TEXT), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             sb.setSpan(new TypefaceSpan("sans-serif-medium"), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             sb.setSpan(new AbsoluteSizeSpan(16, true), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sb.append("\n").append(s[1]);
+            sb.append("\n").append(str(s[1]));
         }
         TextView body = Ui.text(this, "", 14.5f, Ui.TEXT_2, Ui.REGULAR);
         body.setText(sb);
@@ -654,45 +693,22 @@ public class MainActivity extends Activity {
         sv.addView(body);
         sv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 (int) (getResources().getDisplayMetrics().heightPixels * 0.55f)));
-        Ui.dialog(this, "Så får du bäst resultat", null, sv, "Klar", null, null);
+        Ui.dialog(this, str(R.string.help_dialog_title), null, sv, str(R.string.action_done), null, null);
     }
 
     private void showAbout() {
-        Ui.dialog(this, "Om L-AD Blocker",
-                "Version " + versionName() + "\n\n"
-                + "L-AD Blocker tar bort reklam och spårning i hela telefonen genom att filtrera "
-                + "uppslag mot reklamservrar direkt på enheten.\n\n"
-                + "Appen samlar inte in några uppgifter. Uppslag som inte blockeras skickas till "
-                + "den DNS-server du valt under Inställningar.\n\n"
-                + "Blocklistor: HaGeZi, StevenBlack, AdAway och OISD.",
-                null, "Stäng", null, null);
+        Ui.dialog(this, str(R.string.about_title), str(R.string.about_message, versionName()),
+                null, str(R.string.action_close), null, null);
     }
 
-    private static final String[][] HELP = {
-        {"Hur det fungerar",
-            "Appen stoppar uppslag mot kända reklam- och spårningsservrar i hela telefonen – i appar, "
-            + "spel och webbläsare. Den använder en lokal VPN: all trafik stannar på telefonen och bara "
-            + "DNS-uppslag går genom appen, så hastigheten påverkas inte."},
-        {"YouTube",
-            "YouTube-appen hämtar reklamen från samma servrar som själva videorna, så ingen blockerare "
-            + "av den här typen kan ta bort den utan att videorna slutar fungera. Det som fungerar:\n"
-            + "•  Firefox med tillägget uBlock Origin\n"
-            + "•  Reklamfria appar som NewPipe eller ReVanced\n"
-            + "•  YouTube Premium"},
-        {"Webbläsare",
-            "Stäng av \"Använd säker DNS\" i Chrome (Inställningar → Integritet och säkerhet) och sätt "
-            + "\"Privat DNS\" i Androids inställningar till Av eller Automatiskt. För helt rena sidor "
-            + "utan tomma reklamrutor: Firefox + uBlock Origin."},
-        {"Spel och appar",
-            "Reklam från bl.a. AdMob, Unity Ads, AppLovin, ironSource, Vungle och Facebook blockeras. "
-            + "Belöningar för att titta på reklam i spel slutar då fungera."},
-        {"Alltid på",
-            "Inställningar → Avancerat → Alltid på. Välj L-AD Blocker och slå på \"Alltid på-VPN\" så "
-            + "startar skyddet automatiskt, även efter omstart."},
-        {"Om något slutar fungera",
-            "Gå till Aktivitet, tryck på den röda domänen och välj Tillåt."},
-        {"Andra VPN-appar",
-            "Android tillåter bara en VPN åt gången. Startar du en annan VPN stängs blockeringen av."},
+    private static final int[][] HELP = {
+        {R.string.help_how_title, R.string.help_how_body},
+        {R.string.help_youtube_title, R.string.help_youtube_body},
+        {R.string.help_browser_title, R.string.help_browser_body},
+        {R.string.help_games_title, R.string.help_games_body},
+        {R.string.help_always_title, R.string.help_always_body},
+        {R.string.help_broken_title, R.string.help_broken_body},
+        {R.string.help_vpn_title, R.string.help_vpn_body},
     };
 
     // ---------------------------------------------------------------- state
@@ -700,11 +716,11 @@ public class MainActivity extends Activity {
     private void refresh(boolean animate) {
         boolean on = AdBlockVpnService.isRunning();
         power.setOn(on, animate);
-        statusTitle.setText(on ? "Du är skyddad" : "Inte skyddad");
+        statusTitle.setText(str(on ? R.string.status_on_title : R.string.status_off_title));
         statusSubtitle.setText(on
-                ? "Reklam blockeras i appar, spel och webbläsare"
-                : "Tryck på knappen för att börja blockera reklam");
-        statusBadge.setText(on ? "●  AKTIV" : "●  AV");
+                ? str(R.string.status_on_sub)
+                : str(R.string.status_off_sub));
+        statusBadge.setText("●  " + str(on ? R.string.badge_on : R.string.badge_off));
         int badgeColor = on ? Ui.ACCENT : Ui.TEXT_3;
         statusBadge.setTextColor(badgeColor);
         statusBadge.setBackground(Ui.rounded(this, Ui.withAlpha(badgeColor, 0x22), 20));
@@ -718,9 +734,12 @@ public class MainActivity extends Activity {
 
         long last = p.getLong(Settings.KEY_LAST_UPDATE, 0);
         int size = Blocklists.filter().listSize();
-        databaseSubtitle.setText(numbers.format(size) + " domäner · "
-                + (last == 0 ? "inte uppdaterad än" : "uppdaterad " + new SimpleDateFormat("d MMM HH:mm", SV).format(new Date(last))));
-        String status = Blocklists.status();
+        databaseSubtitle.setText(last == 0
+                ? str(R.string.database_never, numbers.format(size))
+                : str(R.string.database_updated, numbers.format(size), new SimpleDateFormat(
+                        android.text.format.DateFormat.getBestDateTimePattern(locale(), "dMMMHHmm"), locale())
+                        .format(new Date(last))));
+        String status = Blocklists.status(this);
         databaseStatus.setVisibility(status.isEmpty() ? View.GONE : View.VISIBLE);
         databaseStatus.setText(status);
 
@@ -731,7 +750,7 @@ public class MainActivity extends Activity {
     private String compact(long n) {
         if (n < 100_000) return numbers.format(n);
         if (n < 1_000_000) return (n / 1000) + " k";
-        return String.format(SV, "%.1f M", n / 1_000_000.0);
+        return String.format(locale(), "%.1f M", n / 1_000_000.0);
     }
 
     private void refreshRecent() {
@@ -753,24 +772,24 @@ public class MainActivity extends Activity {
             d.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             d.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
             row.addView(d);
-            row.addView(Ui.text(this, ago(e.time), 12, Ui.TEXT_3, Ui.REGULAR));
+            row.addView(Ui.text(this, ago(this, e.time), 12, Ui.TEXT_3, Ui.REGULAR));
             recentList.addView(row);
             if (++shown == 4) break;
         }
         if (shown == 0) {
             TextView empty = Ui.text(this, AdBlockVpnService.isRunning()
-                    ? "Inget blockerat ännu – öppna en app eller webbplats."
-                    : "Slå på skyddet för att se blockerad reklam här.", 14, Ui.TEXT_3, Ui.REGULAR);
+                    ? str(R.string.recent_empty_on)
+                    : str(R.string.recent_empty_off), 14, Ui.TEXT_3, Ui.REGULAR);
             empty.setPadding(Ui.dp(this, 18), Ui.dp(this, 18), Ui.dp(this, 18), Ui.dp(this, 18));
             recentList.addView(empty);
         }
     }
 
-    private static String ago(long time) {
+    private static String ago(android.content.Context c, long time) {
         long s = Math.max(0, (System.currentTimeMillis() - time) / 1000);
-        if (s < 60) return "nyss";
-        if (s < 3600) return (s / 60) + " min sedan";
-        return (s / 3600) + " h sedan";
+        if (s < 60) return c.getString(R.string.ago_now);
+        if (s < 3600) return c.getString(R.string.ago_min, (int) (s / 60));
+        return c.getString(R.string.ago_hours, (int) (s / 3600));
     }
 
     private void toggle() {
@@ -796,10 +815,8 @@ public class MainActivity extends Activity {
             power.setOn(true, true);
             AdBlockVpnService.start(this);
         } else {
-            Ui.dialog(this, "Tillstånd behövs",
-                    "L-AD Blocker använder en lokal VPN för att stoppa reklam. Ingen trafik skickas till "
-                    + "någon extern server.\n\nOm du har en annan VPN-app aktiv, stäng av den och försök igen.",
-                    null, "OK", null, null);
+            Ui.dialog(this, str(R.string.vpn_denied_title), str(R.string.vpn_denied_message),
+                    null, str(R.string.action_ok), null, null);
         }
     }
 }

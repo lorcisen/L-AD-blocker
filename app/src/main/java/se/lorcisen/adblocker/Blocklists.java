@@ -25,7 +25,8 @@ final class Blocklists {
     private static final long AUTO_UPDATE_AGE_MS = 3L * 24 * 60 * 60 * 1000;
 
     private static volatile DomainFilter current = DomainFilter.EMPTY;
-    private static volatile String status = "";
+    private static volatile int statusRes;
+    private static volatile Object statusArg;
     private static final ExecutorService worker = Executors.newSingleThreadExecutor();
 
     private Blocklists() {}
@@ -34,8 +35,15 @@ final class Blocklists {
         return current;
     }
 
-    static String status() {
-        return status;
+    /** A human-readable status such as "Downloading…", or "" when idle. */
+    static String status(Context c) {
+        int res = statusRes;
+        return res == 0 ? "" : c.getString(res, statusArg);
+    }
+
+    private static void setStatus(int res, Object arg) {
+        statusArg = arg;
+        statusRes = res;
     }
 
     /** Reloads the filter from disk in the background, then downloads lists if they are stale. */
@@ -69,7 +77,7 @@ final class Blocklists {
     }
 
     private static void load(Context c) {
-        status = "Läser in blocklistor…";
+        setStatus(R.string.status_loading, null);
         DomainFilter.Builder b = new DomainFilter.Builder();
         try (BufferedReader r = reader(c.getAssets().open("default_hosts.txt"))) {
             b.addAll(r);
@@ -92,7 +100,7 @@ final class Blocklists {
         Set<String> allow = DomainFilter.parseUserList(p.getString(Settings.KEY_ALLOWLIST, ""));
         Set<String> block = DomainFilter.parseUserList(p.getString(Settings.KEY_BLOCKLIST, ""));
         current = b.build(allow, block);
-        status = "";
+        setStatus(0, null);
     }
 
     private static void download(Context c) {
@@ -100,7 +108,7 @@ final class Blocklists {
         for (Settings.Source s : Settings.SOURCES) {
             if (!Settings.isSourceEnabled(c, s)) continue;
             for (int i = 0; i < s.urls.length; i++) {
-                status = "Laddar ner " + s.name + "…";
+                setStatus(R.string.status_downloading, s.name(c));
                 try {
                     fetch(s.urls[i], file(c, s, i));
                 } catch (IOException e) {
@@ -112,7 +120,7 @@ final class Blocklists {
         if (failed == 0) {
             Settings.prefs(c).edit().putLong(Settings.KEY_LAST_UPDATE, System.currentTimeMillis()).apply();
         }
-        status = failed == 0 ? "" : failed + " lista/listor kunde inte laddas ner";
+        setStatus(failed == 0 ? 0 : R.string.status_failed, failed);
     }
 
     private static void fetch(String url, File dest) throws IOException {
