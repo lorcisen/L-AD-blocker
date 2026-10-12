@@ -82,11 +82,15 @@ public class AdHiderService extends AccessibilityService {
     private static String[] sponsoredWords = {"Sponsored"};
     private static String[] likeWords = {"Like"};
     private static Pattern sponsoredPattern;
+    private static Set<String> activeLangs = new HashSet<>();
+    private static final String KEY_LEARNED_LANGS = "ad_hider_langs";
 
-    /** Picks the words for the phone's language (plus English). */
-    private static synchronized void loadWords() {
-        // The phone's languages (Facebook follows them by default), the app's language and English.
-        Set<String> langs = new HashSet<>();
+    /**
+     * Picks the words to search for: the phone's languages (Facebook follows them by default),
+     * the app's language, English, and any language seen earlier on Facebook's screen.
+     */
+    private static synchronized void loadWords(Set<String> learned) {
+        Set<String> langs = new HashSet<>(learned);
         android.os.LocaleList system = android.content.res.Resources.getSystem().getConfiguration().getLocales();
         for (int i = 0; i < system.size(); i++) langs.add(system.get(i).getLanguage());
         langs.add(Locale.getDefault().getLanguage());
@@ -104,6 +108,47 @@ public class AdHiderService extends AccessibilityService {
         sponsoredWords = sponsored.toArray(new String[0]);
         likeWords = like.toArray(new String[0]);
         sponsoredPattern = buildPattern(sponsored);
+        activeLangs = langs;
+    }
+
+    private void loadWords() {
+        loadWords(Settings.prefs(this).getStringSet(KEY_LEARNED_LANGS, new HashSet<>()));
+    }
+
+    /**
+     * When nothing is found in the expected languages (e.g. Facebook is set to another language
+     * than the phone), every few seconds tries all languages and remembers one that matches.
+     */
+    private void searchOtherLanguages(AccessibilityNodeInfo root, List<AccessibilityNodeInfo> out) {
+        long now = SystemClock.uptimeMillis();
+        if (now - lastFullSearch < 4000) return;
+        lastFullSearch = now;
+        for (String[] row : WORDS) {
+            if (activeLangs.contains(row[0])) continue;
+            List<String> words = new ArrayList<>();
+            for (int i = 1; i < row.length && !row[i].equals("|"); i++) words.add(row[i]);
+            Pattern p = buildPattern(words);
+            for (String word : words) {
+                List<AccessibilityNodeInfo> found = root.findAccessibilityNodeInfosByText(word);
+                if (found == null) continue;
+                for (AccessibilityNodeInfo n : found) {
+                    if (!matches(p, n.getText()) && !matches(p, n.getContentDescription())) continue;
+                    Set<String> learned = new HashSet<>(
+                            Settings.prefs(this).getStringSet(KEY_LEARNED_LANGS, new HashSet<>()));
+                    learned.add(row[0]);
+                    Settings.prefs(this).edit().putStringSet(KEY_LEARNED_LANGS, learned).apply();
+                    loadWords(learned);
+                    out.add(n);
+                    return;
+                }
+            }
+        }
+    }
+
+    private static boolean matches(Pattern p, CharSequence cs) {
+        if (cs == null) return false;
+        String s = cs.toString().replace('\u00a0', ' ').trim();
+        return !s.isEmpty() && s.length() <= 100 && p.matcher(s).find();
     }
 
     static Pattern buildPattern(Iterable<String> words) {
@@ -132,6 +177,7 @@ public class AdHiderService extends AccessibilityService {
     private long lastScan;
     private long lastSkip;
     private long lastDump;
+    private long lastFullSearch;
 
     static boolean isRunning() {
         return running;
@@ -268,6 +314,7 @@ public class AdHiderService extends AccessibilityService {
                 out.add(n);
             }
         }
+        if (out.isEmpty()) searchOtherLanguages(root, out);
         return out;
     }
 
