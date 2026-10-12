@@ -68,8 +68,10 @@ final class Locales {
     }
 
     /** The phone's own language, written in that language (e.g. "Svenska"). */
-    static String systemLanguageName() {
-        Locale l = android.content.res.Resources.getSystem().getConfiguration().getLocales().get(0);
+    static String systemLanguageName(Context c) {
+        Locale l = Build.VERSION.SDK_INT >= 33
+                ? c.getSystemService(LocaleManager.class).getSystemLocales().get(0)
+                : android.content.res.Resources.getSystem().getConfiguration().getLocales().get(0);
         String name = l.getDisplayLanguage(l);
         return name.isEmpty() ? name : name.substring(0, 1).toUpperCase(l) + name.substring(1);
     }

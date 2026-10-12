@@ -661,7 +661,7 @@ public class MainActivity extends Activity {
         for (String tag : Locales.TAGS) {
             LinearLayout row = Ui.horizontal(this);
             row.setPadding(Ui.dp(this, 4), Ui.dp(this, 14), Ui.dp(this, 4), Ui.dp(this, 14));
-            String sub = tag.isEmpty() ? Locales.systemLanguageName() : null;
+            String sub = tag.isEmpty() ? Locales.systemLanguageName(this) : null;
             row.addView(Ui.titleBlock(this, Locales.displayName(this, tag), sub));
             ImageView check = Ui.icon(this, R.drawable.ic_check, Ui.ACCENT, 22);
             check.setVisibility(tag.equals(current) ? View.VISIBLE : View.INVISIBLE);

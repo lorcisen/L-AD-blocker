@@ -10,7 +10,7 @@
     <string name="status_off_title">Sin protección</string>
     <string name="status_off_sub">Toca el botón para empezar a bloquear anuncios</string>
     <string name="power_desc">Activar o desactivar el bloqueo de anuncios</string>
-    <string name="stat_blocked">Bloqueados ahora</string>
+    <string name="stat_blocked">Bloqueados</string>
     <string name="stat_share">Porcentaje</string>
     <string name="stat_total">Total</string>
     <string name="section_database">Base de protección</string>
