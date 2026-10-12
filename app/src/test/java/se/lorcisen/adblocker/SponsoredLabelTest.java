@@ -30,6 +30,16 @@ public class SponsoredLabelTest {
     }
 
     @Test
+    public void matchesFacebookLabelAndLikeButton() {
+        assertTrue(m("Sponsras•Delas med: Offentligt"));
+        assertTrue(AdHiderService.isLikeButton("Knappen Gilla. Dubbeltryck och håll ned för att reagera på kommentaren.", "Gilla"));
+        assertTrue(AdHiderService.isLikeButton("Gilla", "Gilla"));
+        assertTrue(AdHiderService.isLikeButton("Like", "Like"));
+        assertFalse(AdHiderService.isLikeButton("Gillar du det här?", "Gilla"));
+        assertFalse(AdHiderService.isLikeButton("Likely", "Like"));
+    }
+
+    @Test
     public void ignoresOrdinaryText() {
         assertFalse(m("Detta event är sponsrade av kommunen"));
         assertFalse(m("Osponsrad"));

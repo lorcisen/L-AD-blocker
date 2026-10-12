@@ -23,7 +23,7 @@ public class FeedActivity extends Activity {
         super.onCreate(b);
         String[][] posts = {
             {"Anna Svensson", "3 tim", "Vilken fin dag vid sjön!", "#8BC34A"},
-            {"NIBE", "Sponsras · 🌐", "Bra uppvärmning gör livet enklare", "#C62828"},
+            {"NIBE", "Sponsras•Delas med: Offentligt", "Bra uppvärmning gör livet enklare", "#C62828"},
             {"Erik Larsson", "5 tim", "Ny bil idag", "#03A9F4"},
             {"Stadium Outlet", "Sponsrad", "Sport och fritid till outletpris", "#FFEB3B"},
             {"Lisa Berg", "1 d", "Middag med vänner", "#9C27B0"},
@@ -72,6 +72,9 @@ public class FeedActivity extends Activity {
                     TextView t = text(s, 15, Color.GRAY);
                     t.setPadding(0, 8, 64, 24);
                     t.setClickable(true);
+                    if (s.equals("Gilla")) {
+                        t.setContentDescription("Knappen Gilla. Dubbeltryck och håll ned för att reagera.");
+                    }
                     bar.addView(t);
                 }
                 l.addView(bar);

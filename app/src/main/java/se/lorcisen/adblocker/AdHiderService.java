@@ -454,8 +454,27 @@ public class AdHiderService extends AccessibilityService {
             List<AccessibilityNodeInfo> found = node.findAccessibilityNodeInfosByText(word);
             if (found == null) continue;
             for (AccessibilityNodeInfo n : found) {
-                if (startsWithWord(n.getText(), word) || startsWithWord(n.getContentDescription(), word)) return true;
+                if (isLikeButton(n.getText(), word) || isLikeButton(n.getContentDescription(), word)) return true;
             }
+        }
+        return false;
+    }
+
+    /**
+     * True for like buttons such as "Gilla", "Like" or Facebook's "Knappen Gilla. Dubbeltryck och
+     * håll ned…": the word on its own, within a short label.
+     */
+    static boolean isLikeButton(CharSequence cs, String word) {
+        if (cs == null) return false;
+        String s = cs.toString();
+        if (s.length() > 120) return false;
+        int i = 0;
+        while ((i = s.toLowerCase(Locale.ROOT).indexOf(word.toLowerCase(Locale.ROOT), i)) >= 0) {
+            int end = i + word.length();
+            boolean startOk = i == 0 || !Character.isLetter(s.charAt(i - 1));
+            boolean endOk = end == s.length() || !Character.isLetter(s.charAt(end));
+            if (startOk && endOk) return true;
+            i = end;
         }
         return false;
     }
