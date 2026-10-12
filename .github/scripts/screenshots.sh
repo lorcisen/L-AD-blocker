@@ -8,8 +8,14 @@ shot() { sleep 2; adb exec-out screencap -p > "shots/$1.png"; }
 
 # Taps the centre of the first view whose text or content-desc matches $1.
 tap() {
-  adb shell uiautomator dump /sdcard/ui.xml >/dev/null
-  adb pull /sdcard/ui.xml ui.xml >/dev/null
+  rm -f ui.xml
+  for i in 1 2 3; do
+    adb shell rm -f /sdcard/ui.xml
+    adb shell uiautomator dump /sdcard/ui.xml >/dev/null
+    adb pull /sdcard/ui.xml ui.xml >/dev/null 2>&1 && break
+    sleep 2
+  done
+  [ -f ui.xml ] || { echo "TAP FAILED: $1"; return; }
   b=$(python3 - "$1" <<'PY'
 import re, sys, xml.etree.ElementTree as ET
 want = sys.argv[1]

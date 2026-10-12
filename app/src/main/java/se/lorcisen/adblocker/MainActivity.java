@@ -73,6 +73,8 @@ public class MainActivity extends Activity {
     private TextView statTotal;
     private TextView databaseSubtitle;
     private TextView databaseStatus;
+    private Boolean lastOn;
+    private long lastRecentKey = Long.MIN_VALUE;
     private LinearLayout recentList;
 
     // Activity
@@ -716,35 +718,46 @@ public class MainActivity extends Activity {
     private void refresh(boolean animate) {
         boolean on = AdBlockVpnService.isRunning();
         power.setOn(on, animate);
-        statusTitle.setText(str(on ? R.string.status_on_title : R.string.status_off_title));
-        statusSubtitle.setText(on
-                ? str(R.string.status_on_sub)
-                : str(R.string.status_off_sub));
-        statusBadge.setText("●  " + str(on ? R.string.badge_on : R.string.badge_off));
-        int badgeColor = on ? Ui.ACCENT : Ui.TEXT_3;
-        statusBadge.setTextColor(badgeColor);
-        statusBadge.setBackground(Ui.rounded(this, Ui.withAlpha(badgeColor, 0x22), 20));
+        // Only touch views whose content changed, so an idle screen stays idle.
+        if (lastOn == null || lastOn != on) {
+            lastOn = on;
+            statusTitle.setText(str(on ? R.string.status_on_title : R.string.status_off_title));
+            statusSubtitle.setText(str(on ? R.string.status_on_sub : R.string.status_off_sub));
+            statusBadge.setText("●  " + str(on ? R.string.badge_on : R.string.badge_off));
+            int badgeColor = on ? Ui.ACCENT : Ui.TEXT_3;
+            statusBadge.setTextColor(badgeColor);
+            statusBadge.setBackground(Ui.rounded(this, Ui.withAlpha(badgeColor, 0x22), 20));
+        }
 
         SharedPreferences p = Settings.prefs(this);
         long total = QueryLog.total.get();
         long blocked = QueryLog.blocked.get();
-        statBlocked.setText(numbers.format(blocked));
-        statShare.setText(total == 0 ? "–" : (blocked * 100 / total) + " %");
-        statTotal.setText(compact(p.getLong(Settings.KEY_TOTAL_BLOCKED, 0) + blocked));
+        setText(statBlocked, numbers.format(blocked));
+        setText(statShare, total == 0 ? "–" : (blocked * 100 / total) + " %");
+        setText(statTotal, compact(p.getLong(Settings.KEY_TOTAL_BLOCKED, 0) + blocked));
 
         long last = p.getLong(Settings.KEY_LAST_UPDATE, 0);
         int size = Blocklists.filter().listSize();
-        databaseSubtitle.setText(last == 0
+        setText(databaseSubtitle, last == 0
                 ? str(R.string.database_never, numbers.format(size))
                 : str(R.string.database_updated, numbers.format(size), new SimpleDateFormat(
                         android.text.format.DateFormat.getBestDateTimePattern(locale(), "dMMMHHmm"), locale())
                         .format(new Date(last))));
         String status = Blocklists.status(this);
-        databaseStatus.setVisibility(status.isEmpty() ? View.GONE : View.VISIBLE);
-        databaseStatus.setText(status);
+        int visibility = status.isEmpty() ? View.GONE : View.VISIBLE;
+        if (databaseStatus.getVisibility() != visibility) databaseStatus.setVisibility(visibility);
+        setText(databaseStatus, status);
 
-        refreshRecent();
+        long recentKey = QueryLog.total.get() * 31 + (on ? 1 : 0) + System.currentTimeMillis() / 60_000 * 7;
+        if (recentKey != lastRecentKey) {
+            lastRecentKey = recentKey;
+            refreshRecent();
+        }
         if (tab == TAB_ACTIVITY) refreshLog(false);
+    }
+
+    private static void setText(TextView tv, CharSequence text) {
+        if (!TextUtils.equals(tv.getText(), text)) tv.setText(text);
     }
 
     private String compact(long n) {
