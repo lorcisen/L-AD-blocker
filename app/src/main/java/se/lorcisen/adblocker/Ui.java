@@ -259,6 +259,8 @@ final class Ui {
         }
         if (content != null) {
             LinearLayout.LayoutParams lp = matchWrap();
+            // Keep a fixed height the caller set (e.g. for long scrolling content).
+            if (content.getLayoutParams() != null) lp.height = content.getLayoutParams().height;
             lp.topMargin = dp(c, 16);
             box.addView(content, lp);
         }

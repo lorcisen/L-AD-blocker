@@ -10,7 +10,7 @@
     <string name="status_off_title">保護されていません</string>
     <string name="status_off_sub">ボタンをタップして広告のブロックを開始</string>
     <string name="power_desc">広告ブロックのオン／オフ</string>
-    <string name="stat_blocked">現在のブロック数</string>
+    <string name="stat_blocked">ブロック済み</string>
     <string name="stat_share">広告の割合</string>
     <string name="stat_total">合計</string>
     <string name="section_database">保護データベース</string>

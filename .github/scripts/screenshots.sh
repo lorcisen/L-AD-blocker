@@ -88,6 +88,7 @@ shot 14-home-ja
 adb shell cmd locale set-app-locales $PKG --locales ""
 adb shell am force-stop $PKG
 adb shell am start -n $PKG/.MainActivity
+sleep 4
 shot 15-home-system-en
 
 adb logcat -d | grep -E "AndroidRuntime|AdBlockVpn|Blocklists" > shots/logcat.txt
