@@ -74,21 +74,11 @@ jobs:
           name: screenshots
           path: shots/
 
-      - name: Skriv ut skärmdumpar i loggen
-        run: |
-          pip install -q pillow
-          python3 - <<'PY'
-          import base64, glob, io
-          from PIL import Image
-          for f in sorted(glob.glob("shots/*.png")):
-              im = Image.open(f).convert("RGB")
-              im.thumbnail((432, 960))
-              buf = io.BytesIO()
-              im.save(buf, "JPEG", quality=70)
-              data = base64.b64encode(buf.getvalue()).decode()
-              print("SHOT-BEGIN " + f)
-              for i in range(0, len(data), 4000):
-                  print("B64 " + data[i:i + 4000])
-              print("SHOT-END")
-          print(open("shots/logcat.txt").read()[-4000:])
-          PY
+      - name: Packa skärmdumpar
+        run: cd shots && zip -q ../screenshots.zip *
+
+      - name: Bifoga skärmdumpar till releasen
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          files: screenshots.zip
