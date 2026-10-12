@@ -181,6 +181,8 @@ public class AdHiderService extends AccessibilityService {
     private final Rect lastFeedBounds = new Rect();
     private long lastUserScroll;
     private long gestureUntil;
+    private long lastFeedSkip;
+    private final LinkedHashSet<String> skippedAds = new LinkedHashSet<>();
     private int coverColor;
     private AccessibilityNodeInfo lastFeed;
     private final LinkedHashSet<String> adRows = new LinkedHashSet<>();
@@ -295,17 +297,22 @@ public class AdHiderService extends AccessibilityService {
         root.getBoundsInScreen(window);
 
         List<Rect> rects = new ArrayList<>();
+        List<Rect> labelled = new ArrayList<>();
+        List<String> keys = new ArrayList<>();
         for (AccessibilityNodeInfo label : findSponsoredLabels(root)) {
             Rect r = coverFor(label, window);
             if (r != null && r.height() > 24 && !containsSimilar(rects, r)) {
                 rects.add(r);
+                labelled.add(new Rect(r));
+                AccessibilityNodeInfo parent = label.getParent();
+                keys.add(fingerprint(parent != null ? parent : label));
                 countAd(label, r);
             }
         }
         Rect leftover = coverLeftovers(root, rects);
         if (leftover != null && leftover.height() > 24 && !containsSimilar(rects, leftover)) rects.add(leftover);
         showCovers(rects);
-        skipPastAds(rects, window);
+        skipPastAds(labelled, keys, window);
 
         if (Settings.prefs(this).getBoolean(KEY_DIAGNOSTICS, false)
                 && SystemClock.uptimeMillis() - lastDump > 3000) {
@@ -532,10 +539,12 @@ public class AdHiderService extends AccessibilityService {
      * the feed forward by exactly the ad's height so the next post takes its place. Full-screen ads
      * (reels) are swiped away.
      */
-    private void skipPastAds(List<Rect> ads, Rect window) {
+    private void skipPastAds(List<Rect> ads, List<String> keys, Rect window) {
         if (ads.isEmpty() || Build.VERSION.SDK_INT < 24) return;
         long now = SystemClock.uptimeMillis();
         if (now < gestureUntil) return;
+        // Only ever react to the user's own scrolling: one skip per scroll, never a chain of them.
+        if (lastUserScroll <= lastFeedSkip) return;
         if (now - lastUserScroll < 450) {
             // Wait until the user lets go; scrolling against their finger would feel broken.
             handler.removeCallbacks(scan);
@@ -543,10 +552,16 @@ public class AdHiderService extends AccessibilityService {
             return;
         }
         Rect feed = lastFeedBounds;
-        for (Rect ad : ads) {
+        for (int i = 0; i < ads.size(); i++) {
+            Rect ad = ads.get(i);
+            String key = keys.get(i);
+            if (skippedAds.contains(key)) continue;
             if (ad.equals(window) || feed.isEmpty()) {
-                if (ad.equals(window)) swipe(window.centerX(), window.top + window.height() * 3 / 4,
-                        window.top + window.height() / 4, 250, false);
+                if (ad.equals(window)) {
+                    markSkipped(key);
+                    swipe(window.centerX(), window.top + window.height() * 3 / 4,
+                            window.top + window.height() / 4, 250, false);
+                }
                 return;
             }
             if (ad.top > feed.top + feed.height() / 2) continue; // not reached yet
@@ -555,9 +570,16 @@ public class AdHiderService extends AccessibilityService {
             int startY = feed.bottom - Ui.dp(this, 48);
             int endY = Math.max(feed.top + Ui.dp(this, 16),
                     startY - dist - android.view.ViewConfiguration.get(this).getScaledTouchSlop());
+            markSkipped(key);
             swipe(feed.centerX(), startY, endY, Math.max(280, (startY - endY) / 2), true);
             return;
         }
+    }
+
+    private void markSkipped(String key) {
+        lastFeedSkip = SystemClock.uptimeMillis();
+        skippedAds.add(key);
+        if (skippedAds.size() > 200) skippedAds.remove(skippedAds.iterator().next());
     }
 
     /** A swipe that ends by holding still, so the feed moves exactly the distance and doesn't fling. */
