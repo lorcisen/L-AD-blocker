@@ -197,7 +197,9 @@ public class MainActivity extends Activity {
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             TextView label = Ui.text(this, labels[i], 12, Ui.TEXT_3, Ui.MEDIUM);
             label.setPadding(0, Ui.dp(this, 4), 0, 0);
-            item.addView(label);
+            label.setGravity(Gravity.CENTER);
+            label.setSingleLine(true);
+            item.addView(label, Ui.matchWrap());
             int index = i;
             item.setOnClickListener(v -> selectTab(index));
             item.setBackground(Ui.ripple(null, new ColorDrawable(Color.WHITE)));

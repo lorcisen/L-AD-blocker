@@ -44,18 +44,31 @@ tap "Aktivitet"
 shot 4-activity
 tap "Blockerade"
 shot 5-activity-blocked
+tap "app-measurement.com"
+shot 5b-allow-dialog
+tap "Avbryt"
 
 tap "Inställningar"
 shot 6-settings
 adb shell input swipe 540 1900 540 400 300
 shot 7-settings-scrolled
+adb shell input swipe 540 1900 540 400 300
+adb shell input swipe 540 1900 540 400 300
+shot 7b-settings-bottom
 tap "YouTube, webbläsare och spel"
 shot 8-help
-adb shell input keyevent KEYCODE_BACK
+tap "Klar"
+tap "Tillåtna domäner"
+shot 8b-edit-list
+tap "Avbryt"
 
+adb shell input keyevent KEYCODE_HOME
 adb shell cmd statusbar expand-notifications
 shot 9-notification
 adb shell cmd statusbar collapse
+adb shell am start -n $PKG/.MainActivity
+tap "Slå på eller av reklamblockering"
+shot 10-turned-off
 
 adb logcat -d | grep -E "AndroidRuntime|AdBlockVpn|Blocklists" > shots/logcat.txt
 exit 0
