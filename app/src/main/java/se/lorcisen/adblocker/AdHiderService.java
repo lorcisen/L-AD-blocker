@@ -178,6 +178,10 @@ public class AdHiderService extends AccessibilityService {
     private long lastSkip;
     private long lastDump;
     private long lastFullSearch;
+    private final Rect lastFeedBounds = new Rect();
+    private long lastUserScroll;
+    private long gestureUntil;
+    private int coverColor;
     private AccessibilityNodeInfo lastFeed;
     private final LinkedHashSet<String> adRows = new LinkedHashSet<>();
 
@@ -249,6 +253,7 @@ public class AdHiderService extends AccessibilityService {
         if (!pkg.equals(currentPackage)) {
             currentPackage = pkg;
             lastFeed = null;
+            coverColor = 0;
             clearCovers();
         }
 
@@ -258,9 +263,12 @@ public class AdHiderService extends AccessibilityService {
         }
 
         // Move existing covers along with the scroll right away, then rescan shortly after.
-        if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_SCROLLED && Build.VERSION.SDK_INT >= 28) {
-            int dy = event.getScrollDeltaY();
-            if (dy != 0 && dy != -1) shiftCovers(-dy);
+        if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
+            if (SystemClock.uptimeMillis() > gestureUntil) lastUserScroll = SystemClock.uptimeMillis();
+            if (Build.VERSION.SDK_INT >= 28) {
+                int dy = event.getScrollDeltaY();
+                if (dy != 0 && dy != -1) shiftCovers(-dy);
+            }
         }
         long now = SystemClock.uptimeMillis();
         handler.removeCallbacks(scan);
@@ -297,6 +305,7 @@ public class AdHiderService extends AccessibilityService {
         Rect leftover = coverLeftovers(root, rects);
         if (leftover != null && leftover.height() > 24 && !containsSimilar(rects, leftover)) rects.add(leftover);
         showCovers(rects);
+        skipPastAds(rects, window);
 
         if (Settings.prefs(this).getBoolean(KEY_DIAGNOSTICS, false)
                 && SystemClock.uptimeMillis() - lastDump > 3000) {
@@ -356,6 +365,7 @@ public class AdHiderService extends AccessibilityService {
         }
         Rect feedBounds = new Rect();
         feed.getBoundsInScreen(feedBounds);
+        lastFeedBounds.set(feedBounds);
         row.getBoundsInScreen(area);
 
         lastFeed = feed;
@@ -515,6 +525,69 @@ public class AdHiderService extends AccessibilityService {
         Settings.prefs(this).edit().putLong(KEY_HIDDEN_COUNT, n + 1).apply();
     }
 
+    // ------------------------------------------------------------------ skipping
+
+    /**
+     * Once the user has stopped scrolling and an ad has reached the upper half of the feed, scrolls
+     * the feed forward by exactly the ad's height so the next post takes its place. Full-screen ads
+     * (reels) are swiped away.
+     */
+    private void skipPastAds(List<Rect> ads, Rect window) {
+        if (ads.isEmpty() || Build.VERSION.SDK_INT < 24) return;
+        long now = SystemClock.uptimeMillis();
+        if (now < gestureUntil) return;
+        if (now - lastUserScroll < 450) {
+            // Wait until the user lets go; scrolling against their finger would feel broken.
+            handler.removeCallbacks(scan);
+            handler.postDelayed(scan, 500);
+            return;
+        }
+        Rect feed = lastFeedBounds;
+        for (Rect ad : ads) {
+            if (ad.equals(window) || feed.isEmpty()) {
+                if (ad.equals(window)) swipe(window.centerX(), window.top + window.height() * 3 / 4,
+                        window.top + window.height() / 4, 250, false);
+                return;
+            }
+            if (ad.top > feed.top + feed.height() / 2) continue; // not reached yet
+            int dist = ad.height();
+            if (dist < Ui.dp(this, 24)) continue;
+            int startY = feed.bottom - Ui.dp(this, 48);
+            int endY = Math.max(feed.top + Ui.dp(this, 16),
+                    startY - dist - android.view.ViewConfiguration.get(this).getScaledTouchSlop());
+            swipe(feed.centerX(), startY, endY, Math.max(280, (startY - endY) / 2), true);
+            return;
+        }
+    }
+
+    /** A swipe that ends by holding still, so the feed moves exactly the distance and doesn't fling. */
+    private void swipe(int x, int fromY, int toY, int durationMs, boolean holdAtEnd) {
+        android.graphics.Path path = new android.graphics.Path();
+        path.moveTo(x, fromY);
+        path.lineTo(x, toY);
+        gestureUntil = SystemClock.uptimeMillis() + durationMs + 600;
+        android.accessibilityservice.GestureDescription.StrokeDescription stroke;
+        if (holdAtEnd && Build.VERSION.SDK_INT >= 26) {
+            stroke = new android.accessibilityservice.GestureDescription.StrokeDescription(path, 0, durationMs, true);
+            android.accessibilityservice.GestureDescription.StrokeDescription first = stroke;
+            dispatchGesture(new android.accessibilityservice.GestureDescription.Builder().addStroke(first).build(),
+                    new GestureResultCallback() {
+                        @Override
+                        public void onCompleted(android.accessibilityservice.GestureDescription g) {
+                            android.graphics.Path hold = new android.graphics.Path();
+                            hold.moveTo(x, toY);
+                            hold.lineTo(x, toY + 1);
+                            dispatchGesture(new android.accessibilityservice.GestureDescription.Builder()
+                                    .addStroke(first.continueStroke(hold, 0, 160, false)).build(), null, null);
+                        }
+                    }, null);
+        } else {
+            stroke = new android.accessibilityservice.GestureDescription.StrokeDescription(path, 0, durationMs);
+            dispatchGesture(new android.accessibilityservice.GestureDescription.Builder().addStroke(stroke).build(), null, null);
+        }
+        handler.postDelayed(scan, durationMs + 400);
+    }
+
     // ------------------------------------------------------------------ overlays
 
     private void showCovers(List<Rect> rects) {
@@ -538,6 +611,7 @@ public class AdHiderService extends AccessibilityService {
                     }
                 }
             } else {
+                if (covers.isEmpty() && coverColor == 0) sampleBackground(r);
                 View v = makeCover();
                 try {
                     windowManager.addView(v, coverParams(r));
@@ -590,16 +664,50 @@ public class AdHiderService extends AccessibilityService {
         return lp;
     }
 
+    /**
+     * A plain patch in the app's own background colour, so the ad simply looks like empty space
+     * for the moment before it is scrolled past.
+     */
     private View makeCover() {
-        LinearLayout v = Ui.vertical(this);
-        v.setGravity(Gravity.CENTER);
-        v.setBackgroundColor(Ui.BG);
-        v.addView(Ui.icon(this, R.drawable.ic_shield, Ui.ACCENT, 28));
-        TextView t = Ui.text(this, getString(R.string.cover_text), 14, Ui.TEXT_2, Ui.MEDIUM);
-        t.setGravity(Gravity.CENTER);
-        t.setPadding(Ui.dp(this, 16), Ui.dp(this, 8), Ui.dp(this, 16), 0);
-        v.addView(t);
+        View v = new View(this);
+        v.setBackgroundColor(backgroundColor());
+        v.setContentDescription(getString(R.string.cover_text));
         return v;
+    }
+
+    private int backgroundColor() {
+        if (coverColor != 0) return coverColor;
+        int night = getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK;
+        return night == android.content.res.Configuration.UI_MODE_NIGHT_YES ? 0xFF242526 : 0xFFFFFFFF;
+    }
+
+    /** Reads the real background colour from the screen (Android 11+) and recolours the covers. */
+    private void sampleBackground(Rect ad) {
+        if (Build.VERSION.SDK_INT < 30 || ad.isEmpty()) return;
+        int x = ad.left + Ui.dp(this, 4);
+        int y = ad.top + Ui.dp(this, 6);
+        try {
+            takeScreenshot(android.view.Display.DEFAULT_DISPLAY, getMainExecutor(), new TakeScreenshotCallback() {
+                @Override
+                public void onSuccess(ScreenshotResult result) {
+                    android.graphics.Bitmap hw = android.graphics.Bitmap.wrapHardwareBuffer(
+                            result.getHardwareBuffer(), result.getColorSpace());
+                    result.getHardwareBuffer().close();
+                    if (hw == null) return;
+                    android.graphics.Bitmap bmp = hw.copy(android.graphics.Bitmap.Config.ARGB_8888, false);
+                    hw.recycle();
+                    if (x < bmp.getWidth() && y < bmp.getHeight()) {
+                        coverColor = bmp.getPixel(x, y) | 0xFF000000;
+                        for (View v : covers) v.setBackgroundColor(coverColor);
+                    }
+                    bmp.recycle();
+                }
+
+                @Override
+                public void onFailure(int errorCode) {}
+            });
+        } catch (RuntimeException ignored) {
+        }
     }
 
     // ------------------------------------------------------------------ YouTube
