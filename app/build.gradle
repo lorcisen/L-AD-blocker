@@ -1,0 +1,46 @@
+plugins {
+    id "com.android.application"
+}
+
+def versionCodeFromCi = (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger()
+
+android {
+    namespace "se.lorcisen.adblocker"
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "se.lorcisen.adblocker"
+        minSdk 24
+        targetSdk 35
+        versionCode versionCodeFromCi
+        versionName "1.0.${versionCodeFromCi}"
+    }
+
+    signingConfigs {
+        // A fixed key so every new build installs as an update over the previous one.
+        // Set the SIGNING_* environment variables (e.g. from GitHub secrets) to use your own key.
+        release {
+            def ks = System.getenv("SIGNING_KEYSTORE_FILE")
+            storeFile file(ks ?: "signing/ladblocker.jks")
+            storePassword System.getenv("SIGNING_STORE_PASSWORD") ?: "ladblocker"
+            keyAlias System.getenv("SIGNING_KEY_ALIAS") ?: "ladblocker"
+            keyPassword System.getenv("SIGNING_KEY_PASSWORD") ?: "ladblocker"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    testImplementation "junit:junit:4.13.2"
+}
