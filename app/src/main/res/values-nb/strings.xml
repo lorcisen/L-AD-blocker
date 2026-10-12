@@ -80,7 +80,7 @@
     <string name="help_how_title">Slik fungerer det</string>
     <string name="help_how_body">Appen stopper oppslag mot kjente reklame- og sporingsservere på hele telefonen – i apper, spill og nettlesere. Den bruker en lokal VPN: all trafikk blir på telefonen, og bare DNS-oppslag går gjennom appen, så hastigheten påvirkes ikke.</string>
     <string name="help_youtube_title">YouTube, Facebook og Instagram</string>
-    <string name="help_youtube_body">Disse appene henter reklame fra de samme serverne som det vanlige innholdet, så ingen blokkering av denne typen kan fjerne den uten at appene slutter å fungere. Det som fungerer:\n•  Firefox med utvidelsen uBlock Origin\n•  Samsung Internet med en reklameblokkering\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Disse appene sender reklame fra de samme serverne som det vanlige innholdet, så den kan ikke stoppes på nettet. Slå i stedet på «Reklame i apper» i Hjem-fanen: da skjules sponsede innlegg på skjermen, og YouTube-reklame hoppes over så fort som mulig. YouTube-reklame som ikke kan hoppes over, spilles fortsatt – for den kan du bruke Firefox med uBlock Origin eller YouTube Premium.</string>
     <string name="help_browser_title">Nettlesere</string>
     <string name="help_browser_body">Slå av «Bruk sikker DNS» i Chrome (Innstillinger → Personvern og sikkerhet) og sett «Privat DNS» i Android til Av eller Automatisk, ellers kan nettleseren omgå blokkeringen. Reklame som et nettsted viser fra sine egne servere, kan ikke blokkeres på denne måten.</string>
     <string name="help_games_title">Spill og apper</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Reklame blokkeres</string>
     <string name="notif_text">Trykk for statistikk og innstillinger</string>
     <string name="notif_stop">Slå av</string>
+    <string name="service_description">Skjuler sponsede innlegg i Facebook og Instagram og hopper over YouTube-reklame. Leser bare skjermen i de appene; ingenting lagres eller sendes.</string>
+    <string name="cover_text">Reklame skjult av L-AD Blocker</string>
+    <string name="apps_section">Reklame i apper</string>
+    <string name="apps_title">Facebook, Instagram og YouTube</string>
+    <string name="apps_off">Av – trykk for å slå på</string>
+    <string name="apps_on">På · %1$s annonser skjult</string>
+    <string name="apps_setup_title">Skjul reklame i Facebook, Instagram og YouTube</string>
+    <string name="apps_setup_message">Disse appene sender reklame fra de samme serverne som alt annet, så L-AD Blocker skjuler den direkte på skjermen i stedet: sponsede innlegg dekkes over, og YouTube-reklame hoppes over så fort som mulig.\n\nDette krever tilgang til tilgjengelighet. Ingenting av det du ser, lagres eller sendes.\n\n1. Trykk på Åpne innstillinger.\n2. Velg Installerte apper → L-AD Blocker og slå det på.\n\nHvis bryteren er grå: trykk på Appinfo → ⋮ (øverst til høyre) → Tillat begrensede innstillinger, og prøv igjen.</string>
+    <string name="apps_open_settings">Åpne innstillinger</string>
+    <string name="apps_open_app_info">Appinfo</string>
+    <string name="apps_access_title">Tilgjengelighetstilgang</string>
+    <string name="apps_access_on">På</string>
+    <string name="apps_access_off">Av – trykk for å slå på</string>
+    <string name="apps_fb_desc">Dekk over sponsede innlegg</string>
+    <string name="apps_ig_desc">Dekk over sponsede innlegg, historier og reels</string>
+    <string name="apps_yt_desc">Hopp over reklame automatisk så fort som mulig</string>
+    <string name="diag_title">Feilsøkingsmodus</string>
+    <string name="diag_desc">Lagrer oppbygningen av Facebook- og Instagram-skjermen slik at reklamegjenkjenningen kan forbedres</string>
+    <string name="diag_share">Del feilsøkingsdata</string>
+    <string name="diag_share_desc">Send til utvikleren, f.eks. via Google Disk</string>
+    <string name="diag_empty">Ingen data ennå. Slå på feilsøkingsmodus og bla i Facebook først.</string>
 </resources>

@@ -81,7 +81,7 @@
     <string name="help_how_title">How it works</string>
     <string name="help_how_body">The app stops lookups to known ad and tracking servers across your whole phone – in apps, games and browsers. It uses a local VPN: all traffic stays on the phone and only DNS lookups pass through the app, so your speed is not affected.</string>
     <string name="help_youtube_title">YouTube, Facebook and Instagram</string>
-    <string name="help_youtube_body">These apps load ads from the same servers as their regular content, so no blocker of this type can remove them without breaking the apps. What works:\n•  Firefox with the uBlock Origin add-on\n•  Samsung Internet with an ad blocker\n•  YouTube Premium</string>
+    <string name="help_youtube_body">These apps send ads from the same servers as their regular content, so they cannot be stopped on the network. Turn on \"Ads in apps\" on the Home tab instead: sponsored posts are then hidden on the screen and YouTube ads are skipped as soon as possible. YouTube ads that cannot be skipped still play – for those, use Firefox with uBlock Origin or YouTube Premium.</string>
     <string name="help_browser_title">Browsers</string>
     <string name="help_browser_body">Turn off \"Use secure DNS\" in Chrome (Settings → Privacy and security) and set Android\'s \"Private DNS\" to Off or Automatic, otherwise the browser can bypass blocking. Ads that a website serves from its own servers cannot be blocked this way.</string>
     <string name="help_games_title">Games and apps</string>
@@ -102,4 +102,25 @@
     <string name="notif_title">Ads are being blocked</string>
     <string name="notif_text">Tap for statistics and settings</string>
     <string name="notif_stop">Turn off</string>
+    <string name="service_description">Hides sponsored posts in Facebook and Instagram and skips YouTube ads. It only reads the screen of those apps; nothing is saved or sent.</string>
+    <string name="cover_text">Ad hidden by L-AD Blocker</string>
+    <string name="apps_section">Ads in apps</string>
+    <string name="apps_title">Facebook, Instagram &amp; YouTube</string>
+    <string name="apps_off">Off – tap to turn on</string>
+    <string name="apps_on">On · %1$s ads hidden</string>
+    <string name="apps_setup_title">Hide ads in Facebook, Instagram and YouTube</string>
+    <string name="apps_setup_message">These apps send ads from the same servers as everything else, so L-AD Blocker hides them directly on the screen instead: sponsored posts are covered and YouTube ads are skipped as soon as possible.\n\nThis needs accessibility access. Nothing you see is saved or sent anywhere.\n\n1. Tap Open settings.\n2. Choose Installed apps → L-AD Blocker and turn it on.\n\nIf the switch is greyed out: tap App info → ⋮ (top right) → Allow restricted settings, then try again.</string>
+    <string name="apps_open_settings">Open settings</string>
+    <string name="apps_open_app_info">App info</string>
+    <string name="apps_access_title">Accessibility access</string>
+    <string name="apps_access_on">On</string>
+    <string name="apps_access_off">Off – tap to turn on</string>
+    <string name="apps_fb_desc">Cover sponsored posts</string>
+    <string name="apps_ig_desc">Cover sponsored posts, stories and reels</string>
+    <string name="apps_yt_desc">Skip ads automatically as soon as possible</string>
+    <string name="diag_title">Troubleshooting mode</string>
+    <string name="diag_desc">Saves the layout of the Facebook and Instagram screen so ad detection can be improved</string>
+    <string name="diag_share">Share troubleshooting data</string>
+    <string name="diag_share_desc">Send it to the developer, e.g. via Google Drive</string>
+    <string name="diag_empty">No data yet. Turn on troubleshooting mode and scroll in Facebook first.</string>
 </resources>

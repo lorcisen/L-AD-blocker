@@ -21,15 +21,19 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
 
       - name: Testa och bygg
-        run: ./gradlew --no-daemon testReleaseUnitTest assembleRelease
+        run: ./gradlew --no-daemon :app:testReleaseUnitTest :app:assembleRelease :fakefeed:assembleDebug
 
       - name: Byt namn på APK
-        run: cp app/build/outputs/apk/release/app-release.apk L-AD-blocker.apk
+        run: |
+          cp app/build/outputs/apk/release/app-release.apk L-AD-blocker.apk
+          cp fakefeed/build/outputs/apk/debug/fakefeed-debug.apk fakefeed.apk
 
       - uses: actions/upload-artifact@v4
         with:
           name: L-AD-blocker-apk
-          path: L-AD-blocker.apk
+          path: |
+            L-AD-blocker.apk
+            fakefeed.apk
 
       - name: Publicera som release (för nedladdning direkt i mobilen)
         uses: softprops/action-gh-release@v2

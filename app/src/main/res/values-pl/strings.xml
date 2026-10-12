@@ -80,7 +80,7 @@
     <string name="help_how_title">Jak to działa</string>
     <string name="help_how_body">Aplikacja zatrzymuje zapytania do znanych serwerów reklam i śledzenia w całym telefonie – w aplikacjach, grach i przeglądarkach. Używa lokalnego VPN: cały ruch zostaje w telefonie, a przez aplikację przechodzą tylko zapytania DNS, więc prędkość się nie zmienia.</string>
     <string name="help_youtube_title">YouTube, Facebook i Instagram</string>
-    <string name="help_youtube_body">Te aplikacje pobierają reklamy z tych samych serwerów co zwykłe treści, więc żaden bloker tego typu nie usunie ich bez psucia aplikacji. Co działa:\n•  Firefox z dodatkiem uBlock Origin\n•  Samsung Internet z blokerem reklam\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Te aplikacje wysyłają reklamy z tych samych serwerów co zwykłe treści, więc nie da się ich zatrzymać w sieci. Zamiast tego włącz „Reklamy w aplikacjach” na karcie Start: sponsorowane posty zostaną ukryte na ekranie, a reklamy w YouTube pominięte, gdy tylko to możliwe. Reklamy w YouTube, których nie można pominąć, nadal są odtwarzane – na nie pomoże Firefox z uBlock Origin lub YouTube Premium.</string>
     <string name="help_browser_title">Przeglądarki</string>
     <string name="help_browser_body">Wyłącz „Używaj bezpiecznego DNS” w Chrome (Ustawienia → Prywatność i bezpieczeństwo) i ustaw „Prywatny DNS” w Androidzie na Wyłączony lub Automatyczny, inaczej przeglądarka może ominąć blokadę. Reklam, które strona wyświetla z własnych serwerów, nie da się zablokować w ten sposób.</string>
     <string name="help_games_title">Gry i aplikacje</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Reklamy są blokowane</string>
     <string name="notif_text">Dotknij, aby zobaczyć statystyki i ustawienia</string>
     <string name="notif_stop">Wyłącz</string>
+    <string name="service_description">Ukrywa sponsorowane posty w Facebooku i Instagramie oraz pomija reklamy w YouTube. Czyta tylko ekran tych aplikacji; nic nie jest zapisywane ani wysyłane.</string>
+    <string name="cover_text">Reklama ukryta przez L-AD Blocker</string>
+    <string name="apps_section">Reklamy w aplikacjach</string>
+    <string name="apps_title">Facebook, Instagram i YouTube</string>
+    <string name="apps_off">Wyłączone – dotknij, aby włączyć</string>
+    <string name="apps_on">Włączone · ukryte reklamy: %1$s</string>
+    <string name="apps_setup_title">Ukrywaj reklamy w Facebooku, Instagramie i YouTube</string>
+    <string name="apps_setup_message">Te aplikacje wysyłają reklamy z tych samych serwerów co resztę treści, więc L-AD Blocker ukrywa je bezpośrednio na ekranie: sponsorowane posty są zakrywane, a reklamy w YouTube pomijane, gdy tylko to możliwe.\n\nWymaga to dostępu do ułatwień dostępu. Nic z tego, co widzisz, nie jest zapisywane ani wysyłane.\n\n1. Dotknij Otwórz ustawienia.\n2. Wybierz Zainstalowane aplikacje → L-AD Blocker i włącz.\n\nJeśli przełącznik jest szary: dotknij Informacje o aplikacji → ⋮ (w prawym górnym rogu) → Zezwól na ustawienia z ograniczonym dostępem i spróbuj ponownie.</string>
+    <string name="apps_open_settings">Otwórz ustawienia</string>
+    <string name="apps_open_app_info">Informacje o aplikacji</string>
+    <string name="apps_access_title">Dostęp do ułatwień dostępu</string>
+    <string name="apps_access_on">Włączony</string>
+    <string name="apps_access_off">Wyłączony – dotknij, aby włączyć</string>
+    <string name="apps_fb_desc">Zakrywaj sponsorowane posty</string>
+    <string name="apps_ig_desc">Zakrywaj sponsorowane posty, relacje i rolki</string>
+    <string name="apps_yt_desc">Automatycznie pomijaj reklamy, gdy tylko to możliwe</string>
+    <string name="diag_title">Tryb diagnostyczny</string>
+    <string name="diag_desc">Zapisuje układ ekranu Facebooka i Instagrama, aby można było ulepszyć wykrywanie reklam</string>
+    <string name="diag_share">Udostępnij dane diagnostyczne</string>
+    <string name="diag_share_desc">Wyślij je do twórcy, np. przez Dysk Google</string>
+    <string name="diag_empty">Brak danych. Włącz tryb diagnostyczny i najpierw przewiń Facebooka.</string>
 </resources>

@@ -80,7 +80,7 @@
     <string name="help_how_title">Come funziona</string>
     <string name="help_how_body">L’app blocca le richieste verso server noti di pubblicità e tracciamento su tutto il telefono: in app, giochi e browser. Usa una VPN locale: tutto il traffico resta sul telefono e solo le richieste DNS passano dall’app, quindi la velocità non cambia.</string>
     <string name="help_youtube_title">YouTube, Facebook e Instagram</string>
-    <string name="help_youtube_body">Queste app caricano le pubblicità dagli stessi server dei contenuti normali, quindi nessun blocco di questo tipo può rimuoverle senza far smettere di funzionare le app. Cosa funziona:\n•  Firefox con il componente aggiuntivo uBlock Origin\n•  Samsung Internet con un blocco pubblicità\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Queste app inviano la pubblicità dagli stessi server dei contenuti normali, quindi non si può fermare in rete. Attiva invece \"Pubblicità nelle app\" nella scheda Home: i post sponsorizzati vengono nascosti sullo schermo e le pubblicità di YouTube saltate appena possibile. Le pubblicità di YouTube non saltabili vengono comunque riprodotte; per quelle usa Firefox con uBlock Origin o YouTube Premium.</string>
     <string name="help_browser_title">Browser</string>
     <string name="help_browser_body">Disattiva \"Usa DNS sicuro\" in Chrome (Impostazioni → Privacy e sicurezza) e imposta il \"DNS privato\" di Android su Disattivato o Automatico, altrimenti il browser può aggirare il blocco. Le pubblicità che un sito serve dai propri server non si possono bloccare in questo modo.</string>
     <string name="help_games_title">Giochi e app</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Pubblicità bloccate</string>
     <string name="notif_text">Tocca per statistiche e impostazioni</string>
     <string name="notif_stop">Disattiva</string>
+    <string name="service_description">Nasconde i post sponsorizzati in Facebook e Instagram e salta le pubblicità di YouTube. Legge solo lo schermo di queste app; niente viene salvato o inviato.</string>
+    <string name="cover_text">Pubblicità nascosta da L-AD Blocker</string>
+    <string name="apps_section">Pubblicità nelle app</string>
+    <string name="apps_title">Facebook, Instagram e YouTube</string>
+    <string name="apps_off">Disattivato – tocca per attivare</string>
+    <string name="apps_on">Attivo · %1$s annunci nascosti</string>
+    <string name="apps_setup_title">Nascondi la pubblicità in Facebook, Instagram e YouTube</string>
+    <string name="apps_setup_message">Queste app inviano la pubblicità dagli stessi server di tutto il resto, quindi L-AD Blocker la nasconde direttamente sullo schermo: i post sponsorizzati vengono coperti e le pubblicità di YouTube saltate appena possibile.\n\nServe l’accesso di accessibilità. Nulla di ciò che vedi viene salvato o inviato.\n\n1. Tocca Apri impostazioni.\n2. Scegli App installate → L-AD Blocker e attivalo.\n\nSe l’interruttore è grigio: tocca Info app → ⋮ (in alto a destra) → Consenti impostazioni con restrizioni e riprova.</string>
+    <string name="apps_open_settings">Apri impostazioni</string>
+    <string name="apps_open_app_info">Info app</string>
+    <string name="apps_access_title">Accesso di accessibilità</string>
+    <string name="apps_access_on">Attivo</string>
+    <string name="apps_access_off">Disattivato – tocca per attivare</string>
+    <string name="apps_fb_desc">Copri i post sponsorizzati</string>
+    <string name="apps_ig_desc">Copri post, storie e reel sponsorizzati</string>
+    <string name="apps_yt_desc">Salta la pubblicità automaticamente appena possibile</string>
+    <string name="diag_title">Modalità diagnostica</string>
+    <string name="diag_desc">Salva la struttura della schermata di Facebook e Instagram per migliorare il riconoscimento degli annunci</string>
+    <string name="diag_share">Condividi dati diagnostici</string>
+    <string name="diag_share_desc">Inviali allo sviluppatore, ad es. tramite Google Drive</string>
+    <string name="diag_empty">Ancora nessun dato. Attiva la modalità diagnostica e scorri prima Facebook.</string>
 </resources>

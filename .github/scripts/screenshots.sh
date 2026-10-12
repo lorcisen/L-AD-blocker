@@ -97,5 +97,23 @@ adb shell am start -n $PKG/.MainActivity
 sleep 4
 shot 15-home-system-en
 
+# Ad hiding: a stand-in feed app with the Facebook package name, and the accessibility service on.
+adb install -r fakefeed.apk
+adb shell settings put secure enabled_accessibility_services $PKG/$PKG.AdHiderService
+adb shell settings put secure accessibility_enabled 1
+sleep 3
+adb shell am start -W -n com.facebook.katana/.FeedActivity
+sleep 3
+shot 16-feed-top
+adb shell input swipe 540 1700 540 1100 400
+shot 17-feed-scrolled
+adb shell input swipe 540 1700 540 700 400
+shot 18-feed-scrolled-more
+adb shell input keyevent KEYCODE_HOME
+shot 19-launcher-after-feed
+adb shell am start -n $PKG/.MainActivity
+tap "Hem"
+shot 20-home-apps-card
+
 adb logcat -d | grep -E "AndroidRuntime|AdBlockVpn|Blocklists" > shots/logcat.txt
 exit 0

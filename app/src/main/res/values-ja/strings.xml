@@ -80,7 +80,7 @@
     <string name="help_how_title">仕組み</string>
     <string name="help_how_body">このアプリは、アプリ・ゲーム・ブラウザなどスマートフォン全体で、既知の広告およびトラッキングサーバーへの問い合わせを止めます。ローカル VPN を使用し、すべての通信は端末内にとどまり、アプリを通るのは DNS の問い合わせだけなので、通信速度には影響しません。</string>
     <string name="help_youtube_title">YouTube、Facebook、Instagram</string>
-    <string name="help_youtube_body">これらのアプリは通常のコンテンツと同じサーバーから広告を読み込むため、この種のブロッカーではアプリを壊さずに広告を消すことはできません。有効な方法：\n•  Firefox と uBlock Origin アドオン\n•  Samsung Internet と広告ブロッカー\n•  YouTube Premium</string>
+    <string name="help_youtube_body">これらのアプリは通常のコンテンツと同じサーバーから広告を配信するため、ネットワーク上では止められません。代わりにホームタブで「アプリ内の広告」をオンにすると、スポンサー投稿が画面上で隠され、YouTube の広告はできるだけ早くスキップされます。スキップできない YouTube 広告は再生されます。それには Firefox と uBlock Origin、または YouTube Premium をお使いください。</string>
     <string name="help_browser_title">ブラウザ</string>
     <string name="help_browser_body">Chrome の「セキュア DNS を使用する」（設定 → プライバシーとセキュリティ）をオフにし、Android の「プライベート DNS」をオフまたは自動に設定してください。そうしないとブラウザがブロックを回避することがあります。ウェブサイトが自社サーバーから配信する広告はこの方法ではブロックできません。</string>
     <string name="help_games_title">ゲームとアプリ</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">広告をブロック中</string>
     <string name="notif_text">タップして統計と設定を表示</string>
     <string name="notif_stop">オフにする</string>
+    <string name="service_description">Facebook と Instagram のスポンサー投稿を隠し、YouTube の広告をスキップします。これらのアプリの画面を読み取るだけで、何も保存・送信しません。</string>
+    <string name="cover_text">L-AD Blocker が広告を非表示にしました</string>
+    <string name="apps_section">アプリ内の広告</string>
+    <string name="apps_title">Facebook、Instagram、YouTube</string>
+    <string name="apps_off">オフ – タップしてオンにする</string>
+    <string name="apps_on">オン · %1$s 件の広告を非表示</string>
+    <string name="apps_setup_title">Facebook、Instagram、YouTube の広告を隠す</string>
+    <string name="apps_setup_message">これらのアプリは他のコンテンツと同じサーバーから広告を配信するため、L-AD Blocker は画面上で直接広告を隠します。スポンサー投稿は覆い隠され、YouTube の広告はできるだけ早くスキップされます。\n\nこれにはユーザー補助のアクセス権が必要です。画面の内容が保存・送信されることはありません。\n\n1. 「設定を開く」をタップします。\n2. 「インストール済みアプリ」→ L-AD Blocker を選んでオンにします。\n\nスイッチがグレーの場合：「アプリ情報」→ ⋮（右上）→「制限付き設定を許可」をタップしてから、もう一度お試しください。</string>
+    <string name="apps_open_settings">設定を開く</string>
+    <string name="apps_open_app_info">アプリ情報</string>
+    <string name="apps_access_title">ユーザー補助のアクセス</string>
+    <string name="apps_access_on">オン</string>
+    <string name="apps_access_off">オフ – タップしてオンにする</string>
+    <string name="apps_fb_desc">スポンサー投稿を覆い隠す</string>
+    <string name="apps_ig_desc">スポンサー投稿、ストーリーズ、リールを覆い隠す</string>
+    <string name="apps_yt_desc">できるだけ早く広告を自動でスキップ</string>
+    <string name="diag_title">トラブルシューティング モード</string>
+    <string name="diag_desc">広告の検出を改善するため、Facebook と Instagram の画面構成を保存します</string>
+    <string name="diag_share">トラブルシューティング データを共有</string>
+    <string name="diag_share_desc">Google ドライブなどで開発者に送信します</string>
+    <string name="diag_empty">まだデータがありません。トラブルシューティング モードをオンにして、先に Facebook をスクロールしてください。</string>
 </resources>

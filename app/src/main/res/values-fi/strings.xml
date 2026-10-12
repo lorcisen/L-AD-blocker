@@ -80,7 +80,7 @@
     <string name="help_how_title">Miten se toimii</string>
     <string name="help_how_body">Sovellus pysäyttää haut tunnettuihin mainos- ja seurantapalvelimiin koko puhelimessa – sovelluksissa, peleissä ja selaimissa. Se käyttää paikallista VPN:ää: kaikki liikenne pysyy puhelimessa ja vain DNS-haut kulkevat sovelluksen kautta, joten nopeus ei muutu.</string>
     <string name="help_youtube_title">YouTube, Facebook ja Instagram</string>
-    <string name="help_youtube_body">Nämä sovellukset lataavat mainokset samoilta palvelimilta kuin tavallisen sisällön, joten mikään tämäntyyppinen esto ei voi poistaa niitä rikkomatta sovelluksia. Mikä toimii:\n•  Firefox ja uBlock Origin -lisäosa\n•  Samsung Internet ja mainosesto\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Nämä sovellukset lähettävät mainokset samoilta palvelimilta kuin tavallisen sisällön, joten niitä ei voi pysäyttää verkossa. Ota sen sijaan käyttöön \"Mainokset sovelluksissa\" Koti-välilehdellä: sponsoroidut julkaisut piilotetaan näytöltä ja YouTube-mainokset ohitetaan heti kun mahdollista. Ohittamattomat YouTube-mainokset näytetään silti – niihin auttaa Firefox ja uBlock Origin tai YouTube Premium.</string>
     <string name="help_browser_title">Selaimet</string>
     <string name="help_browser_body">Poista Chromessa käytöstä \"Käytä suojattua DNS:ää\" (Asetukset → Yksityisyys ja turvallisuus) ja aseta Androidin \"Yksityinen DNS\" tilaan Pois tai Automaattinen, muuten selain voi kiertää eston. Mainoksia, jotka sivusto näyttää omilta palvelimiltaan, ei voi estää tällä tavalla.</string>
     <string name="help_games_title">Pelit ja sovellukset</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Mainoksia estetään</string>
     <string name="notif_text">Napauta nähdäksesi tilastot ja asetukset</string>
     <string name="notif_stop">Sammuta</string>
+    <string name="service_description">Piilottaa sponsoroidut julkaisut Facebookissa ja Instagramissa ja ohittaa YouTube-mainokset. Lukee vain näiden sovellusten näyttöä; mitään ei tallenneta eikä lähetetä.</string>
+    <string name="cover_text">L-AD Blocker piilotti mainoksen</string>
+    <string name="apps_section">Mainokset sovelluksissa</string>
+    <string name="apps_title">Facebook, Instagram ja YouTube</string>
+    <string name="apps_off">Pois – ota käyttöön napauttamalla</string>
+    <string name="apps_on">Päällä · %1$s mainosta piilotettu</string>
+    <string name="apps_setup_title">Piilota mainokset Facebookissa, Instagramissa ja YouTubessa</string>
+    <string name="apps_setup_message">Nämä sovellukset lähettävät mainokset samoilta palvelimilta kuin kaiken muun, joten L-AD Blocker piilottaa ne suoraan näytöltä: sponsoroidut julkaisut peitetään ja YouTube-mainokset ohitetaan heti kun mahdollista.\n\nTämä vaatii esteettömyysoikeuden. Mitään näkemääsi ei tallenneta eikä lähetetä.\n\n1. Napauta Avaa asetukset.\n2. Valitse Asennetut sovellukset → L-AD Blocker ja ota se käyttöön.\n\nJos kytkin on harmaa: napauta Sovelluksen tiedot → ⋮ (oikealla ylhäällä) → Salli rajoitetut asetukset ja yritä uudelleen.</string>
+    <string name="apps_open_settings">Avaa asetukset</string>
+    <string name="apps_open_app_info">Sovelluksen tiedot</string>
+    <string name="apps_access_title">Esteettömyysoikeus</string>
+    <string name="apps_access_on">Päällä</string>
+    <string name="apps_access_off">Pois – ota käyttöön napauttamalla</string>
+    <string name="apps_fb_desc">Peitä sponsoroidut julkaisut</string>
+    <string name="apps_ig_desc">Peitä sponsoroidut julkaisut, tarinat ja reelsit</string>
+    <string name="apps_yt_desc">Ohita mainokset automaattisesti heti kun mahdollista</string>
+    <string name="diag_title">Vianmääritystila</string>
+    <string name="diag_desc">Tallentaa Facebook- ja Instagram-näkymän rakenteen, jotta mainosten tunnistusta voidaan parantaa</string>
+    <string name="diag_share">Jaa vianmääritystiedot</string>
+    <string name="diag_share_desc">Lähetä kehittäjälle, esim. Google Driven kautta</string>
+    <string name="diag_empty">Ei vielä tietoja. Ota vianmääritystila käyttöön ja selaa ensin Facebookia.</string>
 </resources>

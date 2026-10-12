@@ -80,7 +80,7 @@
     <string name="help_how_title">工作原理</string>
     <string name="help_how_body">本应用会在整部手机上（应用、游戏和浏览器中）阻止对已知广告和跟踪服务器的查询。它使用本地 VPN：所有流量都留在手机上，只有 DNS 查询经过本应用，因此不会影响网速。</string>
     <string name="help_youtube_title">YouTube、Facebook 和 Instagram</string>
-    <string name="help_youtube_body">这些应用从与正常内容相同的服务器加载广告，因此此类拦截器都无法在不破坏应用的情况下去除这些广告。可行的方法：\n•  Firefox 搭配 uBlock Origin 扩展\n•  Samsung Internet 搭配广告拦截器\n•  YouTube Premium</string>
+    <string name="help_youtube_body">这些应用从与正常内容相同的服务器发送广告，因此无法在网络层面阻止。请改为在“首页”标签中开启“应用内广告”：赞助帖子会在屏幕上被隐藏，YouTube 广告会尽快跳过。无法跳过的 YouTube 广告仍会播放——对此可使用搭配 uBlock Origin 的 Firefox 或 YouTube Premium。</string>
     <string name="help_browser_title">浏览器</string>
     <string name="help_browser_body">请在 Chrome 中关闭“使用安全 DNS”（设置 → 隐私和安全），并将 Android 的“私人 DNS”设为关闭或自动，否则浏览器可能绕过拦截。网站从自己服务器提供的广告无法用这种方式拦截。</string>
     <string name="help_games_title">游戏和应用</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">正在拦截广告</string>
     <string name="notif_text">点按查看统计和设置</string>
     <string name="notif_stop">关闭</string>
+    <string name="service_description">隐藏 Facebook 和 Instagram 中的赞助帖子，并跳过 YouTube 广告。仅读取这些应用的屏幕内容，不会保存或发送任何信息。</string>
+    <string name="cover_text">广告已被 L-AD Blocker 隐藏</string>
+    <string name="apps_section">应用内广告</string>
+    <string name="apps_title">Facebook、Instagram 和 YouTube</string>
+    <string name="apps_off">已关闭——点按开启</string>
+    <string name="apps_on">已开启 · 已隐藏 %1$s 条广告</string>
+    <string name="apps_setup_title">隐藏 Facebook、Instagram 和 YouTube 中的广告</string>
+    <string name="apps_setup_message">这些应用从与其他内容相同的服务器发送广告，因此 L-AD Blocker 会直接在屏幕上隐藏它们：赞助帖子会被遮盖，YouTube 广告会尽快跳过。\n\n这需要无障碍权限。您看到的内容不会被保存或发送。\n\n1. 点按“打开设置”。\n2. 选择“已安装的应用”→ L-AD Blocker 并开启。\n\n如果开关是灰色的：点按“应用信息”→ ⋮（右上角）→“允许受限制的设置”，然后重试。</string>
+    <string name="apps_open_settings">打开设置</string>
+    <string name="apps_open_app_info">应用信息</string>
+    <string name="apps_access_title">无障碍权限</string>
+    <string name="apps_access_on">已开启</string>
+    <string name="apps_access_off">已关闭——点按开启</string>
+    <string name="apps_fb_desc">遮盖赞助帖子</string>
+    <string name="apps_ig_desc">遮盖赞助帖子、快拍和 Reels</string>
+    <string name="apps_yt_desc">尽快自动跳过广告</string>
+    <string name="diag_title">故障排除模式</string>
+    <string name="diag_desc">保存 Facebook 和 Instagram 的屏幕结构，以便改进广告识别</string>
+    <string name="diag_share">分享故障排除数据</string>
+    <string name="diag_share_desc">发送给开发者，例如通过 Google 云端硬盘</string>
+    <string name="diag_empty">暂无数据。请先开启故障排除模式并在 Facebook 中滚动浏览。</string>
 </resources>

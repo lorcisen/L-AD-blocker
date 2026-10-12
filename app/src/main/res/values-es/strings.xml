@@ -80,7 +80,7 @@
     <string name="help_how_title">Cómo funciona</string>
     <string name="help_how_body">La app detiene las consultas a servidores conocidos de anuncios y rastreo en todo el teléfono: en apps, juegos y navegadores. Usa una VPN local: todo el tráfico se queda en el teléfono y solo las consultas DNS pasan por la app, así que la velocidad no se ve afectada.</string>
     <string name="help_youtube_title">YouTube, Facebook e Instagram</string>
-    <string name="help_youtube_body">Estas apps cargan los anuncios desde los mismos servidores que su contenido normal, así que ningún bloqueador de este tipo puede eliminarlos sin romper las apps. Lo que funciona:\n•  Firefox con el complemento uBlock Origin\n•  Samsung Internet con un bloqueador de anuncios\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Estas apps envían los anuncios desde los mismos servidores que su contenido normal, así que no se pueden detener en la red. Activa \"Anuncios en apps\" en la pestaña Inicio: las publicaciones patrocinadas se ocultan en la pantalla y los anuncios de YouTube se omiten en cuanto es posible. Los anuncios de YouTube que no se pueden omitir se siguen reproduciendo; para ellos, usa Firefox con uBlock Origin o YouTube Premium.</string>
     <string name="help_browser_title">Navegadores</string>
     <string name="help_browser_body">Desactiva \"Usar DNS seguro\" en Chrome (Ajustes → Privacidad y seguridad) y configura el \"DNS privado\" de Android en Desactivado o Automático; si no, el navegador puede saltarse el bloqueo. Los anuncios que un sitio web sirve desde sus propios servidores no se pueden bloquear así.</string>
     <string name="help_games_title">Juegos y apps</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Se están bloqueando anuncios</string>
     <string name="notif_text">Toca para ver estadísticas y ajustes</string>
     <string name="notif_stop">Desactivar</string>
+    <string name="service_description">Oculta las publicaciones patrocinadas en Facebook e Instagram y omite los anuncios de YouTube. Solo lee la pantalla de esas apps; no se guarda ni se envía nada.</string>
+    <string name="cover_text">Anuncio ocultado por L-AD Blocker</string>
+    <string name="apps_section">Anuncios en apps</string>
+    <string name="apps_title">Facebook, Instagram y YouTube</string>
+    <string name="apps_off">Desactivado: toca para activar</string>
+    <string name="apps_on">Activado · %1$s anuncios ocultos</string>
+    <string name="apps_setup_title">Ocultar anuncios en Facebook, Instagram y YouTube</string>
+    <string name="apps_setup_message">Estas apps envían los anuncios desde los mismos servidores que todo lo demás, así que L-AD Blocker los oculta directamente en la pantalla: las publicaciones patrocinadas se tapan y los anuncios de YouTube se omiten en cuanto es posible.\n\nPara ello necesita acceso de accesibilidad. Nada de lo que ves se guarda ni se envía.\n\n1. Toca Abrir ajustes.\n2. Elige Apps instaladas → L-AD Blocker y actívalo.\n\nSi el interruptor está gris: toca Información de la app → ⋮ (arriba a la derecha) → Permitir ajustes restringidos e inténtalo de nuevo.</string>
+    <string name="apps_open_settings">Abrir ajustes</string>
+    <string name="apps_open_app_info">Información de la app</string>
+    <string name="apps_access_title">Acceso de accesibilidad</string>
+    <string name="apps_access_on">Activado</string>
+    <string name="apps_access_off">Desactivado: toca para activar</string>
+    <string name="apps_fb_desc">Tapar publicaciones patrocinadas</string>
+    <string name="apps_ig_desc">Tapar publicaciones, historias y reels patrocinados</string>
+    <string name="apps_yt_desc">Omitir anuncios automáticamente en cuanto sea posible</string>
+    <string name="diag_title">Modo de diagnóstico</string>
+    <string name="diag_desc">Guarda la estructura de la pantalla de Facebook e Instagram para mejorar la detección de anuncios</string>
+    <string name="diag_share">Compartir datos de diagnóstico</string>
+    <string name="diag_share_desc">Envíalos al desarrollador, p. ej. por Google Drive</string>
+    <string name="diag_empty">Aún no hay datos. Activa el modo de diagnóstico y desplázate primero por Facebook.</string>
 </resources>

@@ -80,7 +80,7 @@
     <string name="help_how_title">Comment ça marche</string>
     <string name="help_how_body">L’appli bloque les requêtes vers les serveurs de pub et de pistage connus sur tout le téléphone – dans les applis, jeux et navigateurs. Elle utilise un VPN local : tout le trafic reste sur le téléphone et seules les requêtes DNS passent par l’appli, la vitesse n’est donc pas affectée.</string>
     <string name="help_youtube_title">YouTube, Facebook et Instagram</string>
-    <string name="help_youtube_body">Ces applis chargent les pubs depuis les mêmes serveurs que leur contenu normal : aucun bloqueur de ce type ne peut les supprimer sans casser les applis. Ce qui fonctionne :\n•  Firefox avec l’extension uBlock Origin\n•  Samsung Internet avec un bloqueur de pubs\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Ces applis envoient les pubs depuis les mêmes serveurs que leur contenu normal : impossible de les arrêter sur le réseau. Activez plutôt « Pubs dans les applis » dans l’onglet Accueil : les publications sponsorisées sont alors masquées à l’écran et les pubs YouTube passées dès que possible. Les pubs YouTube non désactivables sont toujours diffusées – pour celles-ci, utilisez Firefox avec uBlock Origin ou YouTube Premium.</string>
     <string name="help_browser_title">Navigateurs</string>
     <string name="help_browser_body">Désactivez « Utiliser le DNS sécurisé » dans Chrome (Paramètres → Confidentialité et sécurité) et réglez le « DNS privé » d’Android sur Désactivé ou Automatique, sinon le navigateur peut contourner le blocage. Les pubs qu’un site diffuse depuis ses propres serveurs ne peuvent pas être bloquées ainsi.</string>
     <string name="help_games_title">Jeux et applis</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Les pubs sont bloquées</string>
     <string name="notif_text">Appuyez pour les statistiques et les réglages</string>
     <string name="notif_stop">Désactiver</string>
+    <string name="service_description">Masque les publications sponsorisées dans Facebook et Instagram et passe les pubs YouTube. Lit uniquement l’écran de ces applis ; rien n’est enregistré ni envoyé.</string>
+    <string name="cover_text">Pub masquée par L-AD Blocker</string>
+    <string name="apps_section">Pubs dans les applis</string>
+    <string name="apps_title">Facebook, Instagram et YouTube</string>
+    <string name="apps_off">Désactivé – appuyez pour activer</string>
+    <string name="apps_on">Activé · %1$s pubs masquées</string>
+    <string name="apps_setup_title">Masquer les pubs dans Facebook, Instagram et YouTube</string>
+    <string name="apps_setup_message">Ces applis envoient les pubs depuis les mêmes serveurs que le reste, alors L-AD Blocker les masque directement à l’écran : les publications sponsorisées sont recouvertes et les pubs YouTube sont passées dès que possible.\n\nCela nécessite l’accès d’accessibilité. Rien de ce que vous voyez n’est enregistré ni envoyé.\n\n1. Appuyez sur Ouvrir les réglages.\n2. Choisissez Applis installées → L-AD Blocker et activez-le.\n\nSi l’interrupteur est grisé : appuyez sur Infos sur l’appli → ⋮ (en haut à droite) → Autoriser les paramètres restreints, puis réessayez.</string>
+    <string name="apps_open_settings">Ouvrir les réglages</string>
+    <string name="apps_open_app_info">Infos sur l’appli</string>
+    <string name="apps_access_title">Accès d’accessibilité</string>
+    <string name="apps_access_on">Activé</string>
+    <string name="apps_access_off">Désactivé – appuyez pour activer</string>
+    <string name="apps_fb_desc">Recouvrir les publications sponsorisées</string>
+    <string name="apps_ig_desc">Recouvrir les publications, stories et reels sponsorisés</string>
+    <string name="apps_yt_desc">Passer les pubs automatiquement dès que possible</string>
+    <string name="diag_title">Mode dépannage</string>
+    <string name="diag_desc">Enregistre la structure de l’écran Facebook et Instagram pour améliorer la détection des pubs</string>
+    <string name="diag_share">Partager les données de dépannage</string>
+    <string name="diag_share_desc">Envoyez-les au développeur, par ex. via Google Drive</string>
+    <string name="diag_empty">Pas encore de données. Activez le mode dépannage et faites d’abord défiler Facebook.</string>
 </resources>

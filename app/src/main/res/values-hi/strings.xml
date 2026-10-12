@@ -80,7 +80,7 @@
     <string name="help_how_title">यह कैसे काम करता है</string>
     <string name="help_how_body">यह ऐप पूरे फ़ोन में – ऐप्स, गेम और ब्राउज़र में – जाने-माने विज्ञापन और ट्रैकिंग सर्वरों के अनुरोध रोकता है। यह लोकल VPN इस्तेमाल करता है: सारा ट्रैफ़िक फ़ोन पर ही रहता है और सिर्फ़ DNS अनुरोध ऐप से गुज़रते हैं, इसलिए स्पीड पर असर नहीं पड़ता।</string>
     <string name="help_youtube_title">YouTube, Facebook और Instagram</string>
-    <string name="help_youtube_body">ये ऐप्स विज्ञापन उन्हीं सर्वरों से लोड करते हैं जिनसे सामान्य सामग्री आती है, इसलिए इस तरह का कोई भी ब्लॉकर ऐप्स को बिगाड़े बिना इन्हें नहीं हटा सकता। जो काम करता है:\n•  uBlock Origin ऐड-ऑन के साथ Firefox\n•  विज्ञापन ब्लॉकर के साथ Samsung Internet\n•  YouTube Premium</string>
+    <string name="help_youtube_body">ये ऐप्स विज्ञापन उन्हीं सर्वरों से भेजते हैं जिनसे सामान्य सामग्री आती है, इसलिए इन्हें नेटवर्क पर रोका नहीं जा सकता। इसकी जगह होम टैब में \"ऐप्स में विज्ञापन\" चालू करें: प्रायोजित पोस्ट स्क्रीन पर छिप जाएँगी और YouTube विज्ञापन जल्द से जल्द स्किप होंगे। जो YouTube विज्ञापन स्किप नहीं हो सकते, वे फिर भी चलेंगे – उनके लिए uBlock Origin के साथ Firefox या YouTube Premium इस्तेमाल करें।</string>
     <string name="help_browser_title">ब्राउज़र</string>
     <string name="help_browser_body">Chrome में \"सुरक्षित DNS का इस्तेमाल करें\" बंद करें (सेटिंग → निजता और सुरक्षा) और Android में \"निजी DNS\" को बंद या ऑटोमैटिक पर रखें, वरना ब्राउज़र ब्लॉकिंग से बच सकता है। कोई वेबसाइट अपने सर्वर से जो विज्ञापन दिखाती है, उन्हें इस तरीके से ब्लॉक नहीं किया जा सकता।</string>
     <string name="help_games_title">गेम और ऐप्स</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">विज्ञापन ब्लॉक हो रहे हैं</string>
     <string name="notif_text">आँकड़े और सेटिंग देखने के लिए टैप करें</string>
     <string name="notif_stop">बंद करें</string>
+    <string name="service_description">Facebook और Instagram में प्रायोजित पोस्ट छिपाता है और YouTube विज्ञापन स्किप करता है। सिर्फ़ इन ऐप्स की स्क्रीन पढ़ता है; कुछ भी सहेजा या भेजा नहीं जाता।</string>
+    <string name="cover_text">L-AD Blocker ने विज्ञापन छिपाया</string>
+    <string name="apps_section">ऐप्स में विज्ञापन</string>
+    <string name="apps_title">Facebook, Instagram और YouTube</string>
+    <string name="apps_off">बंद – चालू करने के लिए टैप करें</string>
+    <string name="apps_on">चालू · %1$s विज्ञापन छिपाए गए</string>
+    <string name="apps_setup_title">Facebook, Instagram और YouTube में विज्ञापन छिपाएँ</string>
+    <string name="apps_setup_message">ये ऐप्स विज्ञापन उन्हीं सर्वरों से भेजते हैं जिनसे बाकी सब कुछ आता है, इसलिए L-AD Blocker उन्हें सीधे स्क्रीन पर छिपाता है: प्रायोजित पोस्ट ढक दी जाती हैं और YouTube विज्ञापन जल्द से जल्द स्किप हो जाते हैं।\n\nइसके लिए सुलभता की अनुमति चाहिए। आप जो देखते हैं, उसमें से कुछ भी सहेजा या भेजा नहीं जाता।\n\n1. सेटिंग खोलें पर टैप करें।\n2. इंस्टॉल किए गए ऐप्स → L-AD Blocker चुनें और चालू करें।\n\nअगर स्विच धूसर है: ऐप की जानकारी → ⋮ (ऊपर दाएँ) → प्रतिबंधित सेटिंग की अनुमति दें पर टैप करें और फिर से कोशिश करें।</string>
+    <string name="apps_open_settings">सेटिंग खोलें</string>
+    <string name="apps_open_app_info">ऐप की जानकारी</string>
+    <string name="apps_access_title">सुलभता अनुमति</string>
+    <string name="apps_access_on">चालू</string>
+    <string name="apps_access_off">बंद – चालू करने के लिए टैप करें</string>
+    <string name="apps_fb_desc">प्रायोजित पोस्ट ढकें</string>
+    <string name="apps_ig_desc">प्रायोजित पोस्ट, स्टोरी और रील्स ढकें</string>
+    <string name="apps_yt_desc">विज्ञापन जल्द से जल्द अपने-आप स्किप करें</string>
+    <string name="diag_title">समस्या निवारण मोड</string>
+    <string name="diag_desc">Facebook और Instagram स्क्रीन की बनावट सहेजता है ताकि विज्ञापन पहचान बेहतर हो सके</string>
+    <string name="diag_share">समस्या निवारण डेटा शेयर करें</string>
+    <string name="diag_share_desc">डेवलपर को भेजें, जैसे Google Drive से</string>
+    <string name="diag_empty">अभी कोई डेटा नहीं। समस्या निवारण मोड चालू करें और पहले Facebook स्क्रॉल करें।</string>
 </resources>

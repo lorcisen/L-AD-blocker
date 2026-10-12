@@ -80,7 +80,7 @@
     <string name="help_how_title">Як це працює</string>
     <string name="help_how_body">Застосунок зупиняє запити до відомих рекламних і трекінгових серверів у всьому телефоні – у застосунках, іграх і браузерах. Він використовує локальний VPN: увесь трафік залишається на телефоні, а через застосунок проходять лише DNS-запити, тож швидкість не змінюється.</string>
     <string name="help_youtube_title">YouTube, Facebook та Instagram</string>
-    <string name="help_youtube_body">Ці застосунки завантажують рекламу з тих самих серверів, що й звичайний вміст, тому жоден блокувальник такого типу не може прибрати її, не зламавши застосунки. Що працює:\n•  Firefox із доповненням uBlock Origin\n•  Samsung Internet із блокувальником реклами\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Ці застосунки завантажують рекламу з тих самих серверів, що й звичайний вміст, тому її не можна зупинити на рівні мережі. Натомість увімкніть «Реклама в застосунках» на вкладці «Головна»: рекламні дописи приховуватимуться на екрані, а реклама на YouTube пропускатиметься якомога раніше. Реклама на YouTube, яку не можна пропустити, однаково відтворюється – для неї використовуйте Firefox з uBlock Origin або YouTube Premium.</string>
     <string name="help_browser_title">Браузери</string>
     <string name="help_browser_body">Вимкніть «Використовувати безпечний DNS» у Chrome (Налаштування → Конфіденційність і безпека) та встановіть «Приватний DNS» в Android на «Вимк.» або «Автоматично», інакше браузер може обходити блокування. Рекламу, яку сайт показує зі своїх серверів, так заблокувати не можна.</string>
     <string name="help_games_title">Ігри та застосунки</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Реклама блокується</string>
     <string name="notif_text">Натисніть для статистики й налаштувань</string>
     <string name="notif_stop">Вимкнути</string>
+    <string name="service_description">Приховує рекламні дописи у Facebook та Instagram і пропускає рекламу на YouTube. Читає лише екран цих застосунків; нічого не зберігається й не надсилається.</string>
+    <string name="cover_text">Рекламу приховано L-AD Blocker</string>
+    <string name="apps_section">Реклама в застосунках</string>
+    <string name="apps_title">Facebook, Instagram та YouTube</string>
+    <string name="apps_off">Вимк. – натисніть, щоб увімкнути</string>
+    <string name="apps_on">Увімк. · приховано оголошень: %1$s</string>
+    <string name="apps_setup_title">Приховувати рекламу у Facebook, Instagram та YouTube</string>
+    <string name="apps_setup_message">Ці застосунки завантажують рекламу з тих самих серверів, що й усе інше, тому L-AD Blocker приховує її прямо на екрані: рекламні дописи закриваються, а реклама на YouTube пропускається якомога раніше.\n\nДля цього потрібен доступ до спеціальних можливостей. Ніщо з того, що ви бачите, не зберігається й не надсилається.\n\n1. Натисніть «Відкрити налаштування».\n2. Виберіть «Установлені застосунки» → L-AD Blocker і ввімкніть.\n\nЯкщо перемикач сірий: натисніть «Про застосунок» → ⋮ (угорі праворуч) → «Дозволити обмежені налаштування» і спробуйте ще раз.</string>
+    <string name="apps_open_settings">Відкрити налаштування</string>
+    <string name="apps_open_app_info">Про застосунок</string>
+    <string name="apps_access_title">Доступ до спеціальних можливостей</string>
+    <string name="apps_access_on">Увімк.</string>
+    <string name="apps_access_off">Вимк. – натисніть, щоб увімкнути</string>
+    <string name="apps_fb_desc">Закривати рекламні дописи</string>
+    <string name="apps_ig_desc">Закривати рекламні дописи, історії та reels</string>
+    <string name="apps_yt_desc">Автоматично пропускати рекламу якомога раніше</string>
+    <string name="diag_title">Режим діагностики</string>
+    <string name="diag_desc">Зберігає структуру екрана Facebook та Instagram, щоб покращити розпізнавання реклами</string>
+    <string name="diag_share">Поділитися даними діагностики</string>
+    <string name="diag_share_desc">Надішліть розробнику, наприклад через Google Диск</string>
+    <string name="diag_empty">Даних поки немає. Увімкніть режим діагностики й спершу погортайте Facebook.</string>
 </resources>

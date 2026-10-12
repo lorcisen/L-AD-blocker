@@ -80,7 +80,7 @@
     <string name="help_how_title">Nasıl çalışır</string>
     <string name="help_how_body">Uygulama, telefonun tamamında – uygulamalarda, oyunlarda ve tarayıcılarda – bilinen reklam ve izleme sunucularına yapılan sorguları durdurur. Yerel bir VPN kullanır: tüm trafik telefonda kalır ve yalnızca DNS sorguları uygulamadan geçer, bu yüzden hızınız etkilenmez.</string>
     <string name="help_youtube_title">YouTube, Facebook ve Instagram</string>
-    <string name="help_youtube_body">Bu uygulamalar reklamları normal içerikle aynı sunuculardan yükler; bu nedenle bu türden hiçbir engelleyici uygulamaları bozmadan onları kaldıramaz. İşe yarayanlar:\n•  uBlock Origin eklentili Firefox\n•  Reklam engelleyicili Samsung Internet\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Bu uygulamalar reklamları normal içerikle aynı sunuculardan gönderir, bu yüzden ağda durdurulamazlar. Bunun yerine Ana sayfa sekmesinde \"Uygulamalardaki reklamlar\"ı açın: sponsorlu gönderiler ekranda gizlenir ve YouTube reklamları mümkün olan en kısa sürede atlanır. Atlanamayan YouTube reklamları yine oynatılır; bunlar için uBlock Origin\'li Firefox veya YouTube Premium kullanın.</string>
     <string name="help_browser_title">Tarayıcılar</string>
     <string name="help_browser_body">Chrome\'da \"Güvenli DNS kullan\" seçeneğini kapatın (Ayarlar → Gizlilik ve güvenlik) ve Android\'in \"Özel DNS\" ayarını Kapalı veya Otomatik yapın; aksi halde tarayıcı engellemeyi atlayabilir. Bir web sitesinin kendi sunucularından sunduğu reklamlar bu yolla engellenemez.</string>
     <string name="help_games_title">Oyunlar ve uygulamalar</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Reklamlar engelleniyor</string>
     <string name="notif_text">İstatistikler ve ayarlar için dokunun</string>
     <string name="notif_stop">Kapat</string>
+    <string name="service_description">Facebook ve Instagram\'daki sponsorlu gönderileri gizler ve YouTube reklamlarını atlar. Yalnızca bu uygulamaların ekranını okur; hiçbir şey kaydedilmez veya gönderilmez.</string>
+    <string name="cover_text">Reklam L-AD Blocker tarafından gizlendi</string>
+    <string name="apps_section">Uygulamalardaki reklamlar</string>
+    <string name="apps_title">Facebook, Instagram ve YouTube</string>
+    <string name="apps_off">Kapalı – açmak için dokunun</string>
+    <string name="apps_on">Açık · %1$s reklam gizlendi</string>
+    <string name="apps_setup_title">Facebook, Instagram ve YouTube\'da reklamları gizle</string>
+    <string name="apps_setup_message">Bu uygulamalar reklamları diğer her şeyle aynı sunuculardan gönderir, bu yüzden L-AD Blocker onları doğrudan ekranda gizler: sponsorlu gönderiler kapatılır ve YouTube reklamları mümkün olan en kısa sürede atlanır.\n\nBunun için erişilebilirlik izni gerekir. Gördüğünüz hiçbir şey kaydedilmez veya gönderilmez.\n\n1. Ayarları aç\'a dokunun.\n2. Yüklü uygulamalar → L-AD Blocker\'ı seçip açın.\n\nAnahtar griyse: Uygulama bilgileri → ⋮ (sağ üst) → Kısıtlanmış ayarlara izin ver\'e dokunup tekrar deneyin.</string>
+    <string name="apps_open_settings">Ayarları aç</string>
+    <string name="apps_open_app_info">Uygulama bilgileri</string>
+    <string name="apps_access_title">Erişilebilirlik izni</string>
+    <string name="apps_access_on">Açık</string>
+    <string name="apps_access_off">Kapalı – açmak için dokunun</string>
+    <string name="apps_fb_desc">Sponsorlu gönderileri kapat</string>
+    <string name="apps_ig_desc">Sponsorlu gönderileri, hikayeleri ve reels\'leri kapat</string>
+    <string name="apps_yt_desc">Reklamları mümkün olan en kısa sürede otomatik atla</string>
+    <string name="diag_title">Sorun giderme modu</string>
+    <string name="diag_desc">Reklam algılamanın iyileştirilebilmesi için Facebook ve Instagram ekranının yapısını kaydeder</string>
+    <string name="diag_share">Sorun giderme verilerini paylaş</string>
+    <string name="diag_share_desc">Geliştiriciye gönderin, örn. Google Drive ile</string>
+    <string name="diag_empty">Henüz veri yok. Sorun giderme modunu açın ve önce Facebook\'ta gezinin.</string>
 </resources>

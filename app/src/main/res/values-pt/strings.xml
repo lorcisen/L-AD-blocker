@@ -80,7 +80,7 @@
     <string name="help_how_title">Como funciona</string>
     <string name="help_how_body">O app bloqueia consultas a servidores conhecidos de anúncios e rastreamento em todo o telefone – em apps, jogos e navegadores. Ele usa uma VPN local: todo o tráfego fica no telefone e apenas as consultas DNS passam pelo app, então a velocidade não é afetada.</string>
     <string name="help_youtube_title">YouTube, Facebook e Instagram</string>
-    <string name="help_youtube_body">Esses apps carregam os anúncios dos mesmos servidores do conteúdo normal, então nenhum bloqueador deste tipo consegue removê-los sem quebrar os apps. O que funciona:\n•  Firefox com o complemento uBlock Origin\n•  Samsung Internet com um bloqueador de anúncios\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Esses apps enviam anúncios dos mesmos servidores que o conteúdo normal, então não dá para bloqueá-los na rede. Ative \"Anúncios em apps\" na guia Início: as publicações patrocinadas ficam ocultas na tela e os anúncios do YouTube são pulados assim que possível. Anúncios do YouTube que não podem ser pulados continuam sendo exibidos; para eles, use o Firefox com uBlock Origin ou o YouTube Premium.</string>
     <string name="help_browser_title">Navegadores</string>
     <string name="help_browser_body">Desative \"Usar DNS seguro\" no Chrome (Configurações → Privacidade e segurança) e defina o \"DNS privado\" do Android como Desativado ou Automático; caso contrário, o navegador pode contornar o bloqueio. Anúncios que um site exibe a partir dos próprios servidores não podem ser bloqueados assim.</string>
     <string name="help_games_title">Jogos e apps</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Anúncios sendo bloqueados</string>
     <string name="notif_text">Toque para ver estatísticas e configurações</string>
     <string name="notif_stop">Desativar</string>
+    <string name="service_description">Oculta publicações patrocinadas no Facebook e Instagram e pula anúncios do YouTube. Só lê a tela desses apps; nada é salvo ou enviado.</string>
+    <string name="cover_text">Anúncio ocultado pelo L-AD Blocker</string>
+    <string name="apps_section">Anúncios em apps</string>
+    <string name="apps_title">Facebook, Instagram e YouTube</string>
+    <string name="apps_off">Desativado – toque para ativar</string>
+    <string name="apps_on">Ativado · %1$s anúncios ocultos</string>
+    <string name="apps_setup_title">Ocultar anúncios no Facebook, Instagram e YouTube</string>
+    <string name="apps_setup_message">Esses apps enviam anúncios dos mesmos servidores que todo o resto, então o L-AD Blocker os oculta diretamente na tela: publicações patrocinadas são cobertas e anúncios do YouTube são pulados assim que possível.\n\nIsso exige acesso de acessibilidade. Nada do que você vê é salvo ou enviado.\n\n1. Toque em Abrir configurações.\n2. Escolha Apps instalados → L-AD Blocker e ative.\n\nSe o botão estiver cinza: toque em Informações do app → ⋮ (canto superior direito) → Permitir configurações restritas e tente de novo.</string>
+    <string name="apps_open_settings">Abrir configurações</string>
+    <string name="apps_open_app_info">Informações do app</string>
+    <string name="apps_access_title">Acesso de acessibilidade</string>
+    <string name="apps_access_on">Ativado</string>
+    <string name="apps_access_off">Desativado – toque para ativar</string>
+    <string name="apps_fb_desc">Cobrir publicações patrocinadas</string>
+    <string name="apps_ig_desc">Cobrir publicações, stories e reels patrocinados</string>
+    <string name="apps_yt_desc">Pular anúncios automaticamente assim que possível</string>
+    <string name="diag_title">Modo de diagnóstico</string>
+    <string name="diag_desc">Salva a estrutura da tela do Facebook e do Instagram para melhorar a detecção de anúncios</string>
+    <string name="diag_share">Compartilhar dados de diagnóstico</string>
+    <string name="diag_share_desc">Envie ao desenvolvedor, por exemplo pelo Google Drive</string>
+    <string name="diag_empty">Ainda não há dados. Ative o modo de diagnóstico e role o Facebook primeiro.</string>
 </resources>

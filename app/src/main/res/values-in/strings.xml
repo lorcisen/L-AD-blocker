@@ -80,7 +80,7 @@
     <string name="help_how_title">Cara kerjanya</string>
     <string name="help_how_body">Aplikasi ini menghentikan permintaan ke server iklan dan pelacak yang dikenal di seluruh ponsel – di aplikasi, game, dan browser. Aplikasi menggunakan VPN lokal: semua lalu lintas tetap di ponsel dan hanya permintaan DNS yang melewati aplikasi, sehingga kecepatan tidak terpengaruh.</string>
     <string name="help_youtube_title">YouTube, Facebook, dan Instagram</string>
-    <string name="help_youtube_body">Aplikasi ini memuat iklan dari server yang sama dengan konten biasa, jadi pemblokir jenis ini tidak dapat menghapusnya tanpa merusak aplikasi. Yang berhasil:\n•  Firefox dengan pengaya uBlock Origin\n•  Samsung Internet dengan pemblokir iklan\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Aplikasi ini mengirim iklan dari server yang sama dengan konten biasanya, jadi tidak dapat dihentikan di jaringan. Sebagai gantinya, aktifkan \"Iklan di aplikasi\" di tab Beranda: postingan bersponsor disembunyikan di layar dan iklan YouTube dilewati secepat mungkin. Iklan YouTube yang tidak bisa dilewati tetap diputar – untuk itu gunakan Firefox dengan uBlock Origin atau YouTube Premium.</string>
     <string name="help_browser_title">Browser</string>
     <string name="help_browser_body">Matikan \"Gunakan DNS aman\" di Chrome (Setelan → Privasi dan keamanan) dan atur \"DNS Pribadi\" Android ke Nonaktif atau Otomatis, jika tidak browser dapat melewati pemblokiran. Iklan yang ditayangkan situs dari servernya sendiri tidak dapat diblokir dengan cara ini.</string>
     <string name="help_games_title">Game dan aplikasi</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Iklan sedang diblokir</string>
     <string name="notif_text">Ketuk untuk statistik dan setelan</string>
     <string name="notif_stop">Matikan</string>
+    <string name="service_description">Menyembunyikan postingan bersponsor di Facebook dan Instagram serta melewati iklan YouTube. Hanya membaca layar aplikasi tersebut; tidak ada yang disimpan atau dikirim.</string>
+    <string name="cover_text">Iklan disembunyikan oleh L-AD Blocker</string>
+    <string name="apps_section">Iklan di aplikasi</string>
+    <string name="apps_title">Facebook, Instagram &amp; YouTube</string>
+    <string name="apps_off">Mati – ketuk untuk mengaktifkan</string>
+    <string name="apps_on">Aktif · %1$s iklan disembunyikan</string>
+    <string name="apps_setup_title">Sembunyikan iklan di Facebook, Instagram, dan YouTube</string>
+    <string name="apps_setup_message">Aplikasi ini mengirim iklan dari server yang sama dengan konten lainnya, jadi L-AD Blocker menyembunyikannya langsung di layar: postingan bersponsor ditutup dan iklan YouTube dilewati secepat mungkin.\n\nIni memerlukan akses aksesibilitas. Tidak ada yang Anda lihat yang disimpan atau dikirim.\n\n1. Ketuk Buka setelan.\n2. Pilih Aplikasi terinstal → L-AD Blocker lalu aktifkan.\n\nJika tombolnya abu-abu: ketuk Info aplikasi → ⋮ (kanan atas) → Izinkan setelan terbatas, lalu coba lagi.</string>
+    <string name="apps_open_settings">Buka setelan</string>
+    <string name="apps_open_app_info">Info aplikasi</string>
+    <string name="apps_access_title">Akses aksesibilitas</string>
+    <string name="apps_access_on">Aktif</string>
+    <string name="apps_access_off">Mati – ketuk untuk mengaktifkan</string>
+    <string name="apps_fb_desc">Tutup postingan bersponsor</string>
+    <string name="apps_ig_desc">Tutup postingan, story, dan reels bersponsor</string>
+    <string name="apps_yt_desc">Lewati iklan otomatis secepat mungkin</string>
+    <string name="diag_title">Mode pemecahan masalah</string>
+    <string name="diag_desc">Menyimpan struktur layar Facebook dan Instagram agar deteksi iklan bisa ditingkatkan</string>
+    <string name="diag_share">Bagikan data pemecahan masalah</string>
+    <string name="diag_share_desc">Kirim ke pengembang, mis. lewat Google Drive</string>
+    <string name="diag_empty">Belum ada data. Aktifkan mode pemecahan masalah dan gulir Facebook terlebih dahulu.</string>
 </resources>

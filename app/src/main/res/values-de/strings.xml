@@ -80,7 +80,7 @@
     <string name="help_how_title">So funktioniert es</string>
     <string name="help_how_body">Die App stoppt Anfragen an bekannte Werbe- und Tracking-Server auf dem ganzen Telefon – in Apps, Spielen und Browsern. Sie nutzt ein lokales VPN: Der gesamte Datenverkehr bleibt auf dem Telefon und nur DNS-Anfragen laufen durch die App, daher bleibt die Geschwindigkeit unverändert.</string>
     <string name="help_youtube_title">YouTube, Facebook und Instagram</string>
-    <string name="help_youtube_body">Diese Apps laden Werbung von denselben Servern wie ihre normalen Inhalte. Deshalb kann kein Blocker dieser Art sie entfernen, ohne die Apps unbrauchbar zu machen. Was funktioniert:\n•  Firefox mit dem Add-on uBlock Origin\n•  Samsung Internet mit einem Werbeblocker\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Diese Apps senden Werbung von denselben Servern wie ihre normalen Inhalte, daher lässt sie sich im Netzwerk nicht stoppen. Schalte stattdessen „Werbung in Apps“ im Tab Start ein: Gesponserte Beiträge werden dann auf dem Bildschirm ausgeblendet und YouTube-Werbung so früh wie möglich übersprungen. Nicht überspringbare YouTube-Werbung läuft weiterhin – dafür hilft Firefox mit uBlock Origin oder YouTube Premium.</string>
     <string name="help_browser_title">Browser</string>
     <string name="help_browser_body">Deaktiviere „Sicheres DNS verwenden“ in Chrome (Einstellungen → Datenschutz und Sicherheit) und stelle „Privates DNS“ in Android auf Aus oder Automatisch, sonst kann der Browser die Sperre umgehen. Werbung, die eine Website von eigenen Servern ausliefert, lässt sich so nicht blockieren.</string>
     <string name="help_games_title">Spiele und Apps</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Werbung wird blockiert</string>
     <string name="notif_text">Tippen für Statistiken und Einstellungen</string>
     <string name="notif_stop">Ausschalten</string>
+    <string name="service_description">Blendet gesponserte Beiträge in Facebook und Instagram aus und überspringt YouTube-Werbung. Liest nur den Bildschirm dieser Apps; nichts wird gespeichert oder gesendet.</string>
+    <string name="cover_text">Werbung von L-AD Blocker ausgeblendet</string>
+    <string name="apps_section">Werbung in Apps</string>
+    <string name="apps_title">Facebook, Instagram &amp; YouTube</string>
+    <string name="apps_off">Aus – zum Einschalten tippen</string>
+    <string name="apps_on">An · %1$s Anzeigen ausgeblendet</string>
+    <string name="apps_setup_title">Werbung in Facebook, Instagram und YouTube ausblenden</string>
+    <string name="apps_setup_message">Diese Apps senden Werbung von denselben Servern wie alles andere. Deshalb blendet L-AD Blocker sie direkt auf dem Bildschirm aus: Gesponserte Beiträge werden abgedeckt und YouTube-Werbung wird so früh wie möglich übersprungen.\n\nDafür ist Bedienungshilfen-Zugriff nötig. Nichts, was du siehst, wird gespeichert oder gesendet.\n\n1. Tippe auf Einstellungen öffnen.\n2. Wähle Installierte Apps → L-AD Blocker und schalte es ein.\n\nWenn der Schalter grau ist: Tippe auf App-Info → ⋮ (oben rechts) → Eingeschränkte Einstellungen zulassen und versuche es erneut.</string>
+    <string name="apps_open_settings">Einstellungen öffnen</string>
+    <string name="apps_open_app_info">App-Info</string>
+    <string name="apps_access_title">Bedienungshilfen-Zugriff</string>
+    <string name="apps_access_on">An</string>
+    <string name="apps_access_off">Aus – zum Einschalten tippen</string>
+    <string name="apps_fb_desc">Gesponserte Beiträge abdecken</string>
+    <string name="apps_ig_desc">Gesponserte Beiträge, Storys und Reels abdecken</string>
+    <string name="apps_yt_desc">Werbung automatisch so früh wie möglich überspringen</string>
+    <string name="diag_title">Fehlerbehebungsmodus</string>
+    <string name="diag_desc">Speichert den Aufbau des Facebook- und Instagram-Bildschirms, damit die Werbeerkennung verbessert werden kann</string>
+    <string name="diag_share">Fehlerbehebungsdaten teilen</string>
+    <string name="diag_share_desc">An den Entwickler senden, z. B. über Google Drive</string>
+    <string name="diag_empty">Noch keine Daten. Schalte den Fehlerbehebungsmodus ein und scrolle zuerst in Facebook.</string>
 </resources>

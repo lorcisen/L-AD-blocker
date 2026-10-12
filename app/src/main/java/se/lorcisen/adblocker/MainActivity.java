@@ -73,6 +73,8 @@ public class MainActivity extends Activity {
     private TextView statTotal;
     private TextView databaseSubtitle;
     private TextView databaseStatus;
+    private TextView appsStatus;
+    private TextView appsAccessStatus;
     private Boolean lastOn;
     private long lastRecentKey = Long.MIN_VALUE;
     private LinearLayout recentList;
@@ -301,6 +303,30 @@ public class MainActivity extends Activity {
         statShare = statCard(stats, str(R.string.stat_share), 10);
         statTotal = statCard(stats, str(R.string.stat_total), 10);
         col.addView(stats, Ui.matchWrap());
+
+        col.addView(Ui.sectionLabel(this, str(R.string.apps_section)));
+        LinearLayout apps = Ui.card(this);
+        LinearLayout appsRow = Ui.row(this);
+        FrameLayout appsIcon = new FrameLayout(this);
+        appsIcon.setBackground(Ui.rounded(this, Ui.withAlpha(Ui.ACCENT_3, 0x22), 14));
+        int ipad = Ui.dp(this, 10);
+        appsIcon.setPadding(ipad, ipad, ipad, ipad);
+        appsIcon.addView(Ui.icon(this, R.drawable.ic_nav_activity, Ui.ACCENT_3, 22));
+        LinearLayout.LayoutParams alp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        alp.rightMargin = Ui.dp(this, 14);
+        appsRow.addView(appsIcon, alp);
+        LinearLayout appsText = Ui.titleBlock(this, str(R.string.apps_title), "");
+        appsStatus = (TextView) appsText.getChildAt(1);
+        appsRow.addView(appsText);
+        appsRow.addView(Ui.icon(this, R.drawable.ic_chevron, Ui.TEXT_3, 22));
+        appsRow.setBackground(Ui.ripple(null, Ui.rounded(this, Color.WHITE, 22)));
+        appsRow.setOnClickListener(v -> {
+            if (AdHiderService.isEnabled(this)) selectTab(TAB_SETTINGS);
+            else showAppsSetup();
+        });
+        apps.addView(appsRow);
+        col.addView(apps, Ui.matchWrap());
 
         col.addView(Ui.sectionLabel(this, str(R.string.section_database)));
         LinearLayout db = Ui.card(this);
@@ -547,6 +573,31 @@ public class MainActivity extends Activity {
         }
         col.addView(lists, Ui.matchWrap());
 
+        col.addView(Ui.sectionLabel(this, str(R.string.apps_section)));
+        LinearLayout appCard = Ui.card(this);
+        LinearLayout accessRow = Ui.navRow(appCard, str(R.string.apps_access_title), "", v -> showAppsSetup());
+        appsAccessStatus = (TextView) ((LinearLayout) accessRow.getChildAt(0)).getChildAt(1);
+        String[][] appSwitches = {
+            {"Facebook", AdHiderService.KEY_FACEBOOK},
+            {"Instagram", AdHiderService.KEY_INSTAGRAM},
+            {"YouTube", AdHiderService.KEY_YOUTUBE},
+        };
+        int[] appDescs = {R.string.apps_fb_desc, R.string.apps_ig_desc, R.string.apps_yt_desc};
+        for (int i = 0; i < appSwitches.length; i++) {
+            String key = appSwitches[i][1];
+            appCard.addView(Ui.divider(this));
+            Switch sw = Ui.switchRow(appCard, appSwitches[i][0], str(appDescs[i]), prefs.getBoolean(key, true));
+            sw.setOnCheckedChangeListener((b, checked) -> prefs.edit().putBoolean(key, checked).apply());
+        }
+        appCard.addView(Ui.divider(this));
+        Switch diag = Ui.switchRow(appCard, str(R.string.diag_title), str(R.string.diag_desc),
+                prefs.getBoolean(AdHiderService.KEY_DIAGNOSTICS, false));
+        diag.setOnCheckedChangeListener((b, checked) ->
+                prefs.edit().putBoolean(AdHiderService.KEY_DIAGNOSTICS, checked).apply());
+        appCard.addView(Ui.divider(this));
+        Ui.navRow(appCard, str(R.string.diag_share), str(R.string.diag_share_desc), v -> shareDiagnostics());
+        col.addView(appCard, Ui.matchWrap());
+
         col.addView(Ui.sectionLabel(this, str(R.string.section_dns)));
         LinearLayout dns = Ui.card(this);
         int selected = prefs.getInt(Settings.KEY_UPSTREAM, 0);
@@ -649,6 +700,45 @@ public class MainActivity extends Activity {
         }, str(R.string.action_cancel));
     }
 
+    private void showAppsSetup() {
+        TextView info = Ui.secondaryButton(this, str(R.string.apps_open_app_info), v -> {
+            try {
+                startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        android.net.Uri.fromParts("package", getPackageName(), null)));
+            } catch (RuntimeException ignored) {
+            }
+        });
+        Ui.dialog(this, str(R.string.apps_setup_title), str(R.string.apps_setup_message), info,
+                str(R.string.apps_open_settings), () -> {
+                    try {
+                        startActivity(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                    } catch (RuntimeException ignored) {
+                    }
+                }, str(R.string.action_cancel));
+    }
+
+    private void shareDiagnostics() {
+        java.io.File f = AdHiderService.diagnosticsFile(this);
+        String text = null;
+        if (f.exists()) {
+            try {
+                byte[] bytes = java.nio.file.Files.readAllBytes(f.toPath());
+                text = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+            } catch (java.io.IOException ignored) {
+            }
+        }
+        if (text == null || text.isEmpty()) {
+            Toast.makeText(this, str(R.string.diag_empty), Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (text.length() > 300_000) text = text.substring(0, 300_000);
+        Intent send = new Intent(Intent.ACTION_SEND)
+                .setType("text/plain")
+                .putExtra(Intent.EXTRA_SUBJECT, "L-AD Blocker diagnostics")
+                .putExtra(Intent.EXTRA_TEXT, text);
+        startActivity(Intent.createChooser(send, str(R.string.diag_share)));
+    }
+
     private void showLanguagePicker() {
         String current = Locales.current(this);
         LinearLayout list = Ui.vertical(this);
@@ -747,6 +837,13 @@ public class MainActivity extends Activity {
         int visibility = status.isEmpty() ? View.GONE : View.VISIBLE;
         if (databaseStatus.getVisibility() != visibility) databaseStatus.setVisibility(visibility);
         setText(databaseStatus, status);
+
+        boolean hider = AdHiderService.isEnabled(this);
+        long hidden = p.getLong(AdHiderService.KEY_HIDDEN_COUNT, 0);
+        setText(appsStatus, hider ? str(R.string.apps_on, numbers.format(hidden)) : str(R.string.apps_off));
+        appsStatus.setTextColor(hider ? Ui.ACCENT : Ui.WARNING);
+        setText(appsAccessStatus, str(hider ? R.string.apps_access_on : R.string.apps_access_off));
+        appsAccessStatus.setTextColor(hider ? Ui.ACCENT : Ui.WARNING);
 
         long recentKey = QueryLog.total.get() * 31 + (on ? 1 : 0) + System.currentTimeMillis() / 60_000 * 7;
         if (recentKey != lastRecentKey) {

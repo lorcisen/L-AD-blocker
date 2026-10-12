@@ -80,7 +80,7 @@
     <string name="help_how_title">Hoe het werkt</string>
     <string name="help_how_body">De app stopt verzoeken naar bekende advertentie- en trackingservers op je hele telefoon – in apps, games en browsers. Hij gebruikt een lokale VPN: al het verkeer blijft op de telefoon en alleen DNS-verzoeken gaan door de app, dus je snelheid blijft gelijk.</string>
     <string name="help_youtube_title">YouTube, Facebook en Instagram</string>
-    <string name="help_youtube_body">Deze apps laden advertenties van dezelfde servers als hun gewone inhoud, dus geen blokkeerder van dit type kan ze verwijderen zonder de apps kapot te maken. Wat wel werkt:\n•  Firefox met de add-on uBlock Origin\n•  Samsung Internet met een advertentieblokkeerder\n•  YouTube Premium</string>
+    <string name="help_youtube_body">Deze apps sturen advertenties via dezelfde servers als hun gewone inhoud, dus ze zijn niet op het netwerk te stoppen. Zet in plaats daarvan \"Advertenties in apps\" aan op het tabblad Start: gesponsorde berichten worden dan op het scherm verborgen en YouTube-advertenties zo snel mogelijk overgeslagen. YouTube-advertenties die niet over te slaan zijn, worden nog steeds afgespeeld; gebruik daarvoor Firefox met uBlock Origin of YouTube Premium.</string>
     <string name="help_browser_title">Browsers</string>
     <string name="help_browser_body">Zet \"Beveiligde DNS gebruiken\" uit in Chrome (Instellingen → Privacy en beveiliging) en zet \"Privé-DNS\" in Android op Uit of Automatisch, anders kan de browser de blokkering omzeilen. Advertenties die een website vanaf eigen servers toont, kunnen zo niet worden geblokkeerd.</string>
     <string name="help_games_title">Games en apps</string>
@@ -101,4 +101,25 @@
     <string name="notif_title">Advertenties worden geblokkeerd</string>
     <string name="notif_text">Tik voor statistieken en instellingen</string>
     <string name="notif_stop">Uitzetten</string>
+    <string name="service_description">Verbergt gesponsorde berichten in Facebook en Instagram en slaat YouTube-advertenties over. Leest alleen het scherm van die apps; er wordt niets opgeslagen of verstuurd.</string>
+    <string name="cover_text">Advertentie verborgen door L-AD Blocker</string>
+    <string name="apps_section">Advertenties in apps</string>
+    <string name="apps_title">Facebook, Instagram en YouTube</string>
+    <string name="apps_off">Uit – tik om aan te zetten</string>
+    <string name="apps_on">Aan · %1$s advertenties verborgen</string>
+    <string name="apps_setup_title">Advertenties verbergen in Facebook, Instagram en YouTube</string>
+    <string name="apps_setup_message">Deze apps sturen advertenties via dezelfde servers als al het andere, dus L-AD Blocker verbergt ze direct op het scherm: gesponsorde berichten worden afgedekt en YouTube-advertenties zo snel mogelijk overgeslagen.\n\nDaarvoor is toegankelijkheidstoegang nodig. Niets van wat je ziet wordt opgeslagen of verstuurd.\n\n1. Tik op Instellingen openen.\n2. Kies Geïnstalleerde apps → L-AD Blocker en zet het aan.\n\nIs de schakelaar grijs? Tik op App-info → ⋮ (rechtsboven) → Beperkte instellingen toestaan en probeer het opnieuw.</string>
+    <string name="apps_open_settings">Instellingen openen</string>
+    <string name="apps_open_app_info">App-info</string>
+    <string name="apps_access_title">Toegankelijkheidstoegang</string>
+    <string name="apps_access_on">Aan</string>
+    <string name="apps_access_off">Uit – tik om aan te zetten</string>
+    <string name="apps_fb_desc">Gesponsorde berichten afdekken</string>
+    <string name="apps_ig_desc">Gesponsorde berichten, verhalen en reels afdekken</string>
+    <string name="apps_yt_desc">Advertenties automatisch zo snel mogelijk overslaan</string>
+    <string name="diag_title">Probleemoplossingsmodus</string>
+    <string name="diag_desc">Slaat de opbouw van het Facebook- en Instagram-scherm op zodat de advertentieherkenning verbeterd kan worden</string>
+    <string name="diag_share">Probleemoplossingsgegevens delen</string>
+    <string name="diag_share_desc">Stuur ze naar de ontwikkelaar, bijv. via Google Drive</string>
+    <string name="diag_empty">Nog geen gegevens. Zet de probleemoplossingsmodus aan en scrol eerst door Facebook.</string>
 </resources>
