@@ -182,6 +182,7 @@ public class AdHiderService extends AccessibilityService {
     private long lastUserScroll;
     private long gestureUntil;
     private long lastFeedSkip;
+    private boolean skipUnfinished;
     private final LinkedHashSet<String> skippedAds = new LinkedHashSet<>();
     private int coverColor;
     private AccessibilityNodeInfo lastFeed;
@@ -312,7 +313,8 @@ public class AdHiderService extends AccessibilityService {
         Rect leftover = coverLeftovers(root, rects);
         if (leftover != null && leftover.height() > 24 && !containsSimilar(rects, leftover)) rects.add(leftover);
         showCovers(rects);
-        skipPastAds(labelled, keys, window);
+        if (skipUnfinished) continueSkip(leftover);
+        else skipPastAds(labelled, keys, window);
 
         if (Settings.prefs(this).getBoolean(KEY_DIAGNOSTICS, false)
                 && SystemClock.uptimeMillis() - lastDump > 3000) {
@@ -564,16 +566,36 @@ public class AdHiderService extends AccessibilityService {
                 }
                 return;
             }
-            if (ad.top > feed.top + feed.height() / 2) continue; // not reached yet
-            int dist = ad.height();
-            if (dist < Ui.dp(this, 24)) continue;
-            int startY = feed.bottom - Ui.dp(this, 48);
-            int endY = Math.max(feed.top + Ui.dp(this, 16),
-                    startY - dist - android.view.ViewConfiguration.get(this).getScaledTouchSlop());
+            // Wait until the ad has reached the top of the feed, then move it out of view entirely
+            // so the next post starts at the top of the screen.
+            if (ad.top > feed.top + feed.height() * 15 / 100) continue;
             markSkipped(key);
-            swipe(feed.centerX(), startY, endY, Math.max(280, (startY - endY) / 2), true);
+            scrollAway(feed, ad.bottom - feed.top);
             return;
         }
+    }
+
+    /** Continues a skip when the ad was taller than one swipe can move. */
+    private void continueSkip(Rect leftover) {
+        if (!skipUnfinished || leftover == null || SystemClock.uptimeMillis() < gestureUntil) return;
+        Rect feed = lastFeedBounds;
+        if (feed.isEmpty() || leftover.top > feed.top + Ui.dp(this, 8)) {
+            skipUnfinished = false;
+            return;
+        }
+        scrollAway(feed, leftover.bottom - feed.top);
+    }
+
+    /** Scrolls the feed up by {@code dist} pixels (as far as one swipe allows). */
+    private void scrollAway(Rect feed, int dist) {
+        if (dist < Ui.dp(this, 24)) return;
+        int slop = android.view.ViewConfiguration.get(this).getScaledTouchSlop();
+        int startY = feed.bottom - Ui.dp(this, 32);
+        int minEnd = feed.top + Ui.dp(this, 16);
+        int endY = startY - dist - slop;
+        skipUnfinished = endY < minEnd;
+        endY = Math.max(minEnd, endY);
+        swipe(feed.centerX(), startY, endY, Math.max(280, (startY - endY) / 2), true);
     }
 
     private void markSkipped(String key) {
