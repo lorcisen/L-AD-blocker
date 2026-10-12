@@ -264,6 +264,7 @@ public class AdBlockVpnService extends VpnService {
                 .setContentText("Tryck för statistik och inställningar")
                 .setContentIntent(mainActivityIntent())
                 .setOngoing(true)
+                .setColor(Ui.ACCENT)
                 .addAction(new Notification.Action.Builder(null, "Stäng av", stop).build())
                 .build();
         try {
