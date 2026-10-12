@@ -57,6 +57,8 @@ adb shell input swipe 540 1700 540 1100 400
 shot 17-feed-scrolled
 adb shell input swipe 540 1700 540 700 400
 shot 18-feed-scrolled-more
+adb shell input swipe 540 1700 540 1300 400
+shot 18b-feed-ad-leaving
 adb shell input keyevent KEYCODE_HOME
 shot 19-launcher-after-feed
 adb shell am start -n $PKG/.MainActivity

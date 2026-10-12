@@ -178,6 +178,8 @@ public class AdHiderService extends AccessibilityService {
     private long lastSkip;
     private long lastDump;
     private long lastFullSearch;
+    private AccessibilityNodeInfo lastFeed;
+    private final LinkedHashSet<String> adRows = new LinkedHashSet<>();
 
     static boolean isRunning() {
         return running;
@@ -246,6 +248,7 @@ public class AdHiderService extends AccessibilityService {
         }
         if (!pkg.equals(currentPackage)) {
             currentPackage = pkg;
+            lastFeed = null;
             clearCovers();
         }
 
@@ -291,6 +294,8 @@ public class AdHiderService extends AccessibilityService {
                 countAd(label, r);
             }
         }
+        Rect leftover = coverLeftovers(root, rects);
+        if (leftover != null && leftover.height() > 24 && !containsSimilar(rects, leftover)) rects.add(leftover);
         showCovers(rects);
 
         if (Settings.prefs(this).getBoolean(KEY_DIAGNOSTICS, false)
@@ -353,6 +358,8 @@ public class AdHiderService extends AccessibilityService {
         feed.getBoundsInScreen(feedBounds);
         row.getBoundsInScreen(area);
 
+        lastFeed = feed;
+        rememberRow(row);
         if (!containsLikeButton(row)) {
             int index = indexOfChild(feed, row);
             int bottom = feedBounds.bottom;
@@ -361,12 +368,13 @@ public class AdHiderService extends AccessibilityService {
                 if (next == null) continue;
                 Rect nb = new Rect();
                 next.getBoundsInScreen(nb);
-                if (containsLikeButton(next)) {
-                    bottom = nb.bottom;
-                    break;
-                }
                 if (containsSponsored(next)) {
                     bottom = nb.top;
+                    break;
+                }
+                rememberRow(next);
+                if (containsLikeButton(next)) {
+                    bottom = nb.bottom;
                     break;
                 }
             }
@@ -374,6 +382,63 @@ public class AdHiderService extends AccessibilityService {
         }
         if (!area.intersect(feedBounds)) return null;
         return area;
+    }
+
+    /** Remembers a feed row as part of an ad, so it stays covered after the label scrolls away. */
+    private void rememberRow(AccessibilityNodeInfo row) {
+        String print = fingerprint(row);
+        if (print.isEmpty()) return;
+        adRows.remove(print);
+        adRows.add(print);
+        if (adRows.size() > 300) adRows.remove(adRows.iterator().next());
+    }
+
+    /**
+     * Covers the rows at the top of the feed that belong to an ad whose "Sponsored" label has
+     * already scrolled out of view.
+     */
+    private Rect coverLeftovers(AccessibilityNodeInfo root, List<Rect> covered) {
+        AccessibilityNodeInfo feed = lastFeed;
+        if (feed == null || !feed.refresh()) return null;
+        Rect feedBounds = new Rect();
+        feed.getBoundsInScreen(feedBounds);
+        Rect area = null;
+        for (int i = 0; i < feed.getChildCount() && i < 8; i++) {
+            AccessibilityNodeInfo row = feed.getChild(i);
+            if (row == null) break;
+            Rect rb = new Rect();
+            row.getBoundsInScreen(rb);
+            if (rb.bottom <= feedBounds.top) continue; // fully scrolled away
+            boolean alreadyCovered = false;
+            for (Rect c : covered) if (c.contains(rb.centerX(), rb.centerY())) alreadyCovered = true;
+            if (alreadyCovered || !adRows.contains(fingerprint(row))) break;
+            boolean footer = containsLikeButton(row);
+            // A like bar alone looks the same under every post; only cover it right after ad rows.
+            if (footer && area == null) break;
+            if (area == null) area = new Rect(rb);
+            else area.union(rb);
+            if (footer) break; // end of the ad
+        }
+        if (area == null || !area.intersect(feedBounds)) return null;
+        return area;
+    }
+
+    /** The text of a row (and a few of its descendants), used to recognise it again later. */
+    private static String fingerprint(AccessibilityNodeInfo row) {
+        StringBuilder sb = new StringBuilder();
+        java.util.ArrayDeque<AccessibilityNodeInfo> queue = new java.util.ArrayDeque<>();
+        queue.add(row);
+        int seen = 0;
+        while (!queue.isEmpty() && seen++ < 16) {
+            AccessibilityNodeInfo n = queue.poll();
+            if (!TextUtils.isEmpty(n.getText())) sb.append(n.getText()).append('|');
+            if (!TextUtils.isEmpty(n.getContentDescription())) sb.append(n.getContentDescription()).append('|');
+            for (int i = 0; i < n.getChildCount(); i++) {
+                AccessibilityNodeInfo c = n.getChild(i);
+                if (c != null) queue.add(c);
+            }
+        }
+        return sb.toString();
     }
 
     private static int indexOfChild(AccessibilityNodeInfo parent, AccessibilityNodeInfo child) {
