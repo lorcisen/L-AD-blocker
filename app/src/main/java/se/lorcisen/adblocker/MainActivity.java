@@ -75,6 +75,7 @@ public class MainActivity extends Activity {
     private TextView databaseStatus;
     private TextView appsStatus;
     private TextView appsAccessStatus;
+    private Switch diagSwitch;
     private Boolean lastOn;
     private long lastRecentKey = Long.MIN_VALUE;
     private LinearLayout recentList;
@@ -590,10 +591,11 @@ public class MainActivity extends Activity {
             sw.setOnCheckedChangeListener((b, checked) -> prefs.edit().putBoolean(key, checked).apply());
         }
         appCard.addView(Ui.divider(this));
-        Switch diag = Ui.switchRow(appCard, str(R.string.diag_title), str(R.string.diag_desc),
-                prefs.getBoolean(AdHiderService.KEY_DIAGNOSTICS, false));
-        diag.setOnCheckedChangeListener((b, checked) ->
-                prefs.edit().putBoolean(AdHiderService.KEY_DIAGNOSTICS, checked).apply());
+        diagSwitch = Ui.switchRow(appCard, str(R.string.diag_title), str(R.string.diag_desc), diagnosticsOn());
+        diagSwitch.setOnCheckedChangeListener((b, checked) -> prefs.edit()
+                .putLong(AdHiderService.KEY_DIAGNOSTICS_UNTIL,
+                        checked ? System.currentTimeMillis() + AdHiderService.DIAGNOSTICS_DURATION_MS : 0)
+                .apply());
         appCard.addView(Ui.divider(this));
         Ui.navRow(appCard, str(R.string.diag_share), str(R.string.diag_share_desc), v -> shareDiagnostics());
         col.addView(appCard, Ui.matchWrap());
@@ -717,6 +719,11 @@ public class MainActivity extends Activity {
                 }, str(R.string.action_cancel));
     }
 
+    private boolean diagnosticsOn() {
+        return System.currentTimeMillis()
+                < Settings.prefs(this).getLong(AdHiderService.KEY_DIAGNOSTICS_UNTIL, 0);
+    }
+
     private void shareDiagnostics() {
         java.io.File f = AdHiderService.diagnosticsFile(this);
         String text = null;
@@ -737,6 +744,9 @@ public class MainActivity extends Activity {
                 .putExtra(Intent.EXTRA_SUBJECT, "L-AD Blocker diagnostics")
                 .putExtra(Intent.EXTRA_TEXT, text);
         startActivity(Intent.createChooser(send, str(R.string.diag_share)));
+        // Sharing is the end of a troubleshooting session: stop recording.
+        Settings.prefs(this).edit().putLong(AdHiderService.KEY_DIAGNOSTICS_UNTIL, 0).apply();
+        diagSwitch.setChecked(false);
     }
 
     private void showLanguagePicker() {
@@ -838,12 +848,14 @@ public class MainActivity extends Activity {
         if (databaseStatus.getVisibility() != visibility) databaseStatus.setVisibility(visibility);
         setText(databaseStatus, status);
 
-        boolean hider = AdHiderService.isEnabled(this);
+        boolean hider = AdHiderService.isEnabled(this) && on;
         long hidden = p.getLong(AdHiderService.KEY_HIDDEN_COUNT, 0);
         setText(appsStatus, hider ? str(R.string.apps_on, numbers.format(hidden)) : str(R.string.apps_off));
         appsStatus.setTextColor(hider ? Ui.ACCENT : Ui.WARNING);
         setText(appsAccessStatus, str(hider ? R.string.apps_access_on : R.string.apps_access_off));
         appsAccessStatus.setTextColor(hider ? Ui.ACCENT : Ui.WARNING);
+
+        if (diagSwitch.isChecked() && !diagnosticsOn()) diagSwitch.setChecked(false);
 
         long recentKey = QueryLog.total.get() * 31 + (on ? 1 : 0) + System.currentTimeMillis() / 60_000 * 7;
         if (recentKey != lastRecentKey) {

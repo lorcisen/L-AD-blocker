@@ -45,8 +45,10 @@ public class AdHiderService extends AccessibilityService {
     static final String KEY_FACEBOOK = "hide_facebook";
     static final String KEY_INSTAGRAM = "hide_instagram";
     static final String KEY_YOUTUBE = "skip_youtube";
-    static final String KEY_DIAGNOSTICS = "diagnostics";
     static final String KEY_HIDDEN_COUNT = "hidden_ads";
+    /** Troubleshooting mode switches itself off after a while so it can't drain the battery. */
+    static final String KEY_DIAGNOSTICS_UNTIL = "diagnostics_until";
+    static final long DIAGNOSTICS_DURATION_MS = 10 * 60 * 1000;
 
     /**
      * The "Sponsored" label and the like button that ends each post, per language. Only the
@@ -182,6 +184,7 @@ public class AdHiderService extends AccessibilityService {
     private long lastUserScroll;
     private long gestureUntil;
     private long lastFeedSkip;
+    private boolean scanPending;
     private boolean skipUnfinished;
     private final LinkedHashSet<String> skippedAds = new LinkedHashSet<>();
     private int coverColor;
@@ -240,6 +243,12 @@ public class AdHiderService extends AccessibilityService {
         String pkg = pkgCs.toString();
         if (pkg.equals(getPackageName())) return;
 
+        // The big on/off button on the home screen switches this off too.
+        if (!Settings.prefs(this).getBoolean(Settings.KEY_WANT_RUNNING, false)) {
+            if (!covers.isEmpty()) clearCovers();
+            return;
+        }
+
         boolean feedApp = (pkg.equals(FACEBOOK) && enabled(KEY_FACEBOOK))
                 || (pkg.equals(INSTAGRAM) && enabled(KEY_INSTAGRAM));
         boolean youtube = pkg.equals(YOUTUBE) && enabled(KEY_YOUTUBE);
@@ -273,10 +282,18 @@ public class AdHiderService extends AccessibilityService {
                 if (dy != 0 && dy != -1) shiftCovers(-dy);
             }
         }
+        // Facebook fires content-change events constantly (videos, counters); rescanning on each
+        // would drain the battery. Scroll events get a quick rescan, everything else is batched.
         long now = SystemClock.uptimeMillis();
-        handler.removeCallbacks(scan);
-        if (now - lastScan > 120) scan();
-        else handler.postDelayed(scan, 120);
+        boolean scrolled = event.getEventType() == AccessibilityEvent.TYPE_VIEW_SCROLLED;
+        long minGap = scrolled ? 150 : 600;
+        if (now - lastScan >= minGap) {
+            handler.removeCallbacks(scan);
+            scan();
+        } else if (!scanPending) {
+            scanPending = true;
+            handler.postDelayed(scan, minGap - (now - lastScan));
+        }
     }
 
     private boolean enabled(String key) {
@@ -286,6 +303,7 @@ public class AdHiderService extends AccessibilityService {
     // ------------------------------------------------------------------ Facebook / Instagram
 
     private void scan() {
+        scanPending = false;
         lastScan = SystemClock.uptimeMillis();
         AccessibilityNodeInfo root = getRootInActiveWindow();
         if (root == null) return;
@@ -316,7 +334,7 @@ public class AdHiderService extends AccessibilityService {
         if (skipUnfinished) continueSkip(leftover);
         else skipPastAds(labelled, keys, window);
 
-        if (Settings.prefs(this).getBoolean(KEY_DIAGNOSTICS, false)
+        if (System.currentTimeMillis() < Settings.prefs(this).getLong(KEY_DIAGNOSTICS_UNTIL, 0)
                 && SystemClock.uptimeMillis() - lastDump > 3000) {
             lastDump = SystemClock.uptimeMillis();
             dump(root);
@@ -368,9 +386,9 @@ public class AdHiderService extends AccessibilityService {
 
         Rect area = new Rect();
         if (feed == null) {
-            // Full-screen viewer (reels, stories): cover the whole window.
-            area.set(window);
-            return area;
+            // Not in a scrolling feed (e.g. the label shown above comments): leave it alone rather
+            // than covering the whole screen.
+            return null;
         }
         Rect feedBounds = new Rect();
         feed.getBoundsInScreen(feedBounds);
@@ -550,7 +568,9 @@ public class AdHiderService extends AccessibilityService {
         if (now - lastUserScroll < 450) {
             // Wait until the user lets go; scrolling against their finger would feel broken.
             handler.removeCallbacks(scan);
+            scanPending = false;
             handler.postDelayed(scan, 500);
+            scanPending = true;
             return;
         }
         Rect feed = lastFeedBounds;
@@ -630,6 +650,7 @@ public class AdHiderService extends AccessibilityService {
             dispatchGesture(new android.accessibilityservice.GestureDescription.Builder().addStroke(stroke).build(), null, null);
         }
         handler.postDelayed(scan, durationMs + 400);
+        scanPending = true;
     }
 
     // ------------------------------------------------------------------ overlays
@@ -679,6 +700,7 @@ public class AdHiderService extends AccessibilityService {
 
     private void clearCovers() {
         handler.removeCallbacks(scan);
+        scanPending = false;
         for (View v : covers) removeCover(v);
         covers.clear();
     }
