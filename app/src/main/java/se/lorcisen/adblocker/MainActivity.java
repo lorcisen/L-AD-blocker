@@ -712,6 +712,10 @@ public class MainActivity extends Activity {
         });
         Ui.dialog(this, str(R.string.apps_setup_title), str(R.string.apps_setup_message), info,
                 str(R.string.apps_open_settings), () -> {
+                    // Ad hiding only runs while protection is on, so switch that on too.
+                    if (!AdBlockVpnService.isRunning() && VpnService.prepare(this) == null) {
+                        AdBlockVpnService.start(this);
+                    }
                     try {
                         startActivity(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS));
                     } catch (RuntimeException ignored) {

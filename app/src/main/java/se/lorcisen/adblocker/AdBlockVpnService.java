@@ -73,6 +73,7 @@ public class AdBlockVpnService extends VpnService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && ACTION_STOP.equals(intent.getAction())) {
             Settings.prefs(this).edit().putBoolean(Settings.KEY_WANT_RUNNING, false).apply();
+            AdHiderService.shutDown();
             shutdown();
             stopSelf();
             return START_NOT_STICKY;

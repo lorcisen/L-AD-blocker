@@ -169,6 +169,8 @@ public class AdHiderService extends AccessibilityService {
     };
 
     private static volatile boolean running;
+    private static volatile AdHiderService instance;
+    private long connectedAt;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final List<View> covers = new ArrayList<>();
@@ -222,11 +224,26 @@ public class AdHiderService extends AccessibilityService {
         windowManager = getSystemService(WindowManager.class);
         loadWords();
         running = true;
+        connectedAt = SystemClock.uptimeMillis();
+        instance = this;
+    }
+
+    /**
+     * Turns the accessibility service fully off, as if the user switched it off in Android's
+     * settings. Called when protection is switched off, so that apps such as BankID, which refuse
+     * to run while any accessibility service is active, work again.
+     */
+    static void shutDown() {
+        AdHiderService s = instance;
+        if (s == null) return;
+        s.clearCovers();
+        if (Build.VERSION.SDK_INT >= 24) s.disableSelf();
     }
 
     @Override
     public void onDestroy() {
         running = false;
+        if (instance == this) instance = null;
         clearCovers();
         super.onDestroy();
     }
@@ -246,6 +263,11 @@ public class AdHiderService extends AccessibilityService {
         // The big on/off button on the home screen switches this off too.
         if (!Settings.prefs(this).getBoolean(Settings.KEY_WANT_RUNNING, false)) {
             if (!covers.isEmpty()) clearCovers();
+            // Don't stay enabled while protection is off (it blocks BankID and others). A short
+            // grace period lets the user turn this on first and then press the power button.
+            if (SystemClock.uptimeMillis() - connectedAt > 60_000 && Build.VERSION.SDK_INT >= 24) {
+                disableSelf();
+            }
             return;
         }
 

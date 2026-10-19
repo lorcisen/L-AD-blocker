@@ -71,5 +71,13 @@ adb shell am start -n $PKG/.MainActivity
 tap "Hem"
 shot 20-home-apps-card
 
+# Turning protection off must also switch off the accessibility service (BankID refuses to run
+# while one is on).
+adb shell settings get secure enabled_accessibility_services > shots/a11y-before-off.txt
+tap "Slå på eller av reklamblockering"
+sleep 4
+shot 21-turned-off
+adb shell settings get secure enabled_accessibility_services > shots/a11y-after-off.txt
+
 timeout 30 adb logcat -d | grep -E "AndroidRuntime|AdBlockVpn|Blocklists|FATAL" > shots/logcat.txt
 exit 0
